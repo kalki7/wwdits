@@ -29,7 +29,7 @@ function setup(){
     for(let i = 0; i < NUM_CIRCLES; i++){
         let circle = {
             x : random(circleSize / 2, width - circleSize / 2),
-            y : random(circleSize / 2, width - circleSize / 2),
+            y : random(circleSize / 2, height - circleSize / 2),
             speedX: random(-FLOAT_SPEED, FLOAT_SPEED),
             speedY: random(-FLOAT_SPEED, FLOAT_SPEED),
             targetX: null,
