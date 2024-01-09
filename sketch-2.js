@@ -84,10 +84,11 @@ function draw(){
             let spacing = width / NUM_CIRCLES;
 
             circle.targetX = i * spacing + circleSize * 0.75;
-            circle.targetY = height - (height / 3);
+            // circle.targetY = height - (height / 3);
+            circle.targetY = ((4 * height / 3) + (FSIZE / 2 - BUF))/2
 
             circle.x = lerp(circle.x, circle.targetX, TRANSITION_SPEED);
-            circle.y = lerp(circle.y, circle.targetY, TRANSITION_SPEED)
+            circle.y = lerp(circle.y, circle.targetY, TRANSITION_SPEED);
         }
 
         ellipse(circle.x, circle.y, circleSize, circleSize);
