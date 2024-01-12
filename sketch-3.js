@@ -5,9 +5,11 @@ let CIRCLESIZE_D = 25;
 let FSIZE = 160;
 let BUF = 40
 
-let circles = [];
+let circles = []; 
 let float = true;
 let circleSize;
+let tDiv;
+let a;
 let mouseNorm = 0;
 
 
@@ -17,7 +19,6 @@ function gxy(x, y) {
 
 function setup(){
     let cnv = createCanvas(windowWidth, windowHeight);
-    cnv.parent("head")
     cnv.style('display', 'block');
     cnv.style('position', 'absolute');
     cnv.style('inset', 0);
@@ -26,15 +27,18 @@ function setup(){
     font = loadFont('assets/helvetica-compressed-5871d14b6903a.otf');
 
     circleSize = width / CIRCLESIZE_D;
+    tDiv = 2 * 3.14 / NUM_CIRCLES;
+    a = width / 8;
 
     for(let i = 0; i < NUM_CIRCLES; i++){
+        let tI = tDiv * i
         let circle = {
             x : random(circleSize / 2, width - circleSize / 2),
             y : random(circleSize / 2, height - circleSize / 2),
             speedX: random(-FLOAT_SPEED, FLOAT_SPEED),
             speedY: random(-FLOAT_SPEED, FLOAT_SPEED),
-            targetX: null,
-            targetY: null
+            targetX:  ((a * sqrt(2) * cos(tI)) / (sq(sin(tI)) + 1)) + (width / 2),
+            targetY: (a * sqrt(2) * cos(tI) * sin(tI)) / (sq(sin(tI)) + 1) + height - (height / 3)
         };
         circles.push(circle);
     }
@@ -80,19 +84,20 @@ function draw(){
             if(circle.y < 0 + circleSize / 2 || circle.y > height - circleSize / 2){
                 circle.speedY = -circle.speedY;
             }
+
+            ellipse(circle.x, circle.y, circleSize, circleSize);
+
         }
         else{
-            let spacing = width / NUM_CIRCLES;
-
-            circle.targetX = i * spacing + circleSize * 0.75;
-            // circle.targetY = height - (height / 3);
-            circle.targetY = ((4 * height / 3) + (FSIZE / 2 - BUF))/2
 
             circle.x = lerp(circle.x, circle.targetX, TRANSITION_SPEED);
             circle.y = lerp(circle.y, circle.targetY, TRANSITION_SPEED);
+
+            ellipse(circle.x, circle.y, circleSize, circleSize);
+
         }
 
-        ellipse(circle.x, circle.y, circleSize, circleSize);
+        
     }
 }
 

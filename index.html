@@ -3,11 +3,99 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
     <script src="sketch-2.js"></script>
     <style>
-      
+      @font-face {
+      font-family: helvetica;
+      src: url(assets/helvetica-compressed-5871d14b6903a.otf);
+    }
+      html, body{
+        margin: 0;
+        height: auto;
+      }
+    
+      .section {
+        height: 100vh;
+        background-color: #1E1E1E;
+        color: #c8c8c8;
+        margin: 0;
+      }
+
+      .reverse {
+        background-color: #c8c8c8;
+        color: #1E1E1E;
+      }
+
+      .layout {
+        min-height: 100vh;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+      .heading{
+        font-family: helvetica;
+        font-size: 80;
+      }
+      .small{
+        font-size: xx-large;
+      }
+
     </style>
   </head>
   <body>
     <main>
+      <div class="bg"></div>
+      <section id="head" class="section">
+        <div class="pad">
+          <div class="container">
+            <div class="layout">
+
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="story" class="section">
+        <div class="pad">
+          <div class="container">
+            <div class="layout">
+              <div class="heading">amateurs seek the sun</div>
+              <div class="heading">get eaten</div>
+              <div class="heading">power stays in the shadows</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="story-2" class="section reverse">
+        <div class="pad">
+          <div class="container">
+            <div class="layout">
+              <div class="heading">same is true for stupidity</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="story-3" class="section">
+        <div class="pad">
+          <div class="container">
+            <div class="layout">
+              <div class="heading small">so let us show the world</div>
+              <div class="heading small">what true stupidity looks like</div>
+              <div class="heading small">let us show them</div>
+              <div class="heading">what we do</div>
+              <div class="heading">in the shadows</div>
+              <div class="heading">shadows</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="story-4" class="section reverse">
+        <div class="pad">
+          <div class="container">
+            <div class="layout">
+              <div class="heading">coming soon, i think</div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </body>
 </html>

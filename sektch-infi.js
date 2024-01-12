@@ -1,18 +1,20 @@
-let NUM_CIRCLES = 16;
+let NUM_CIRCLES = 40;
 let FLOAT_SPEED = 1;
 let TRANSITION_SPEED = 0.05;
-let CIRCLESIZE_D = 25;
+let CIRCLESIZE_D = 100;
 let FSIZE = 160;
 let BUF = 40
 
-let circles = [];
+let circles = []; 
 let float = true;
 let circleSize;
+let tDiv;
+let a;
 let mouseNorm = 0;
 
 
 function gxy(x, y) {
-    return (x - y)
+    return (x - y);
 }
 
 function setup(){
@@ -26,15 +28,19 @@ function setup(){
     font = loadFont('assets/helvetica-compressed-5871d14b6903a.otf');
 
     circleSize = width / CIRCLESIZE_D;
+    tDiv = 2 * 3.14 / NUM_CIRCLES;
+    a = width / 10;
 
     for(let i = 0; i < NUM_CIRCLES; i++){
+        let tI = tDiv * i;
         let circle = {
             x : random(circleSize / 2, width - circleSize / 2),
             y : random(circleSize / 2, height - circleSize / 2),
             speedX: random(-FLOAT_SPEED, FLOAT_SPEED),
             speedY: random(-FLOAT_SPEED, FLOAT_SPEED),
-            targetX: null,
-            targetY: null
+            targetX:  ((a * sqrt(2) * cos(tI)) / (sq(sin(tI)) + 1)) + (width / 2),
+            targetY: (a * sqrt(2) * cos(tI) * sin(tI)) / (sq(sin(tI)) + 1) + height - (height / 6) - FSIZE / 6,
+            tI : tI
         };
         circles.push(circle);
     }
@@ -48,7 +54,7 @@ function draw(){
 
         textAlign(RIGHT, BOTTOM);
         textFont(font, FSIZE/3);
-        text("order", (width / 2) - 20, height - (height / 6));  
+        text("order", (width / 2) - a / 2.5, height - (height / 6));  
     }
     else{
         background(200);
@@ -56,7 +62,7 @@ function draw(){
 
         textAlign(LEFT, BOTTOM);
         textFont(font, FSIZE/3);
-        text("chaos", (width / 2) + 20, height - (height / 6)); 
+        text("chaos", (width / 2) + a / 2.5, height - (height / 6)); 
     }
     textAlign(CENTER, BOTTOM);
     textFont(font, FSIZE);
@@ -64,41 +70,38 @@ function draw(){
     text('do in the', (width / 2) - mouseNorm * 0.1, (height / 2));
     text('shadows', (width / 2), (height / 2) + (FSIZE - BUF));
 
-    textFont(font, FSIZE/3);
-    text("|", (width / 2), height - (height / 6));
+    // textFont(font, FSIZE / 3);
+    // text("|", (width / 2), height - (height / 6));
 
     for(let i = 0; i < circles.length; i++){
         let circle = circles[i];
 
         if(float){
-            circle.x += circle.speedX;
-            circle.y += circle.speedY;
-
-            if(circle.x < 0 + circleSize / 2 || circle.x > width - circleSize / 2){
-                circle.speedX = -circle.speedX;
-            }
-            if(circle.y < 0 + circleSize / 2 || circle.y > height - circleSize / 2){
-                circle.speedY = -circle.speedY;
-            }
-        }
-        else{
-            let spacing = width / NUM_CIRCLES;
-
-            circle.targetX = i * spacing + circleSize * 0.75;
-            // circle.targetY = height - (height / 3);
-            circle.targetY = ((4 * height / 3) + (FSIZE / 2 - BUF))/2
-
+            
             circle.x = lerp(circle.x, circle.targetX, TRANSITION_SPEED);
             circle.y = lerp(circle.y, circle.targetY, TRANSITION_SPEED);
+
+        }
+        else{
+
+            circle.tI += 1/100;
+            circle.x = ((a * sqrt(2) * cos(circle.tI)) / (sq(sin(circle.tI)) + 1)) + (width / 2);
+            circle.y = (a * sqrt(2) * cos(circle.tI) * sin(circle.tI)) / (sq(sin(circle.tI)) + 1) + height - (height / 6) - FSIZE / 6;
+
+            if(circle.tI >= 2 * 3.14){
+                circle.tI = 0;
+            }
+
         }
 
         ellipse(circle.x, circle.y, circleSize, circleSize);
+        
     }
 }
 
-function mouseWheel(){
-    float = false;
-}
+// function mouseWheel(){
+//     float = false;
+// }
 
 function mouseClicked(){
     float = !float;
