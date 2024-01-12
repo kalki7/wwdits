@@ -12,7 +12,7 @@ let mouseNorm = 0;
 
 
 function gxy(x, y) {
-    return (x - y)
+    return (x - y);
 }
 
 function setup(){
@@ -22,7 +22,7 @@ function setup(){
     cnv.style('position', 'absolute');
     cnv.style('inset', 0);
     noStroke();
-
+    noCursor();
     font = loadFont('assets/helvetica-compressed-5871d14b6903a.otf');
 
     circleSize = width / CIRCLESIZE_D;
@@ -100,9 +100,9 @@ function mouseWheel(){
     float = false;
 }
 
-function mouseClicked(){
-    float = !float;
-}
+// function mouseClicked(){
+//     float = !float;
+// }
 
 function windowResized(){
     resizeCanvas(windowWidth, windowHeight);
