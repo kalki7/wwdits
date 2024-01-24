@@ -101,8 +101,8 @@ var s1 = function( sketch ){
         }
         delete mapCheck;
 
-        start.x = Number(sketch.random(0,map.length)).toFixed(0);
-        start.y = Number(sketch.random(0,map[0].length)).toFixed(0);
+        start.x = Math.floor(Number(sketch.random(0,map.length)));
+        start.y = Math.floor(Number(sketch.random(0,map[0].length)));
         point = start;
         id = String(point.x) + "," + String(point.y);
         breifHistory = [id];
@@ -150,7 +150,7 @@ var s1 = function( sketch ){
         }
         id = String(op.x) + "," + String(op.y);
         if(breifHistory.indexOf(id) == -1){
-            // console.log(id," Not done");
+            console.log(id," Not done");
             breifHistory.push(id);
             circleHistory.push([map[op.x][op.y].x, map[op.x][op.y].y])
             history.push(item);
@@ -159,11 +159,11 @@ var s1 = function( sketch ){
             retryCount = 0;
         }
         else{
-            // console.log(id, "already done");
+            console.log(id, "already done");
             options = [];
             retryCount += 1;
             if(retryCount > 80){
-                sketch.mouseClicked();
+                reset();
             }
         }
 
@@ -186,15 +186,16 @@ var s1 = function( sketch ){
 
     }
     
-    sketch.mouseClicked = function(){
-        start.x = Number(sketch.random(0,map.length)).toFixed(0);
-        start.y = Number(sketch.random(0,map[0].length)).toFixed(0);
+    function reset(){
+        start.x = Math.floor(Number(sketch.random(0,map.length)));
+        start.y = Math.floor(Number(sketch.random(0,map[0].length)));
         point = start;
         id = String(point.x) + "," + String(point.y);
         breifHistory = [id];
         circleHistory = [];
         history = [];
         retryCount = 0;
+        options = [];
         sketch.redraw();
 
     }
