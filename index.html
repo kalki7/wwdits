@@ -1,7 +1,6 @@
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.js"></script>
-    <script src="sketch-2.js"></script>
     <style>
       @font-face {
       font-family: helvetica;
@@ -14,14 +13,14 @@
     
       .section {
         height: 100vh;
-        background-color: #1E1E1E;
-        color: #c8c8c8;
+        background-color: #c8c8c8;
+        color: #1E1E1E;
         margin: 0;
       }
 
       .reverse {
-        background-color: #c8c8c8;
-        color: #1E1E1E;
+        background-color: #1E1E1E;
+        color: #c8c8c8;
       }
 
       .layout {
@@ -44,11 +43,11 @@
   <body>
     <main>
       <div class="bg"></div>
-      <section id="head" class="section">
+      <section class="section">
         <div class="pad">
           <div class="container">
-            <div class="layout">
-
+            <div class="layout" id="head">
+              <script src="sektch-infi.js"></script>
             </div>
           </div>
         </div>
@@ -57,57 +56,17 @@
         <div class="pad">
           <div class="container">
             <div class="layout">
-              <div class="heading">amateurs seek the sun</div>
-              <div class="heading">get eaten</div>
-              <div class="heading">power stays in the shadows</div>
+              <div class="heading">#1</div>
+              <div class="heading">the inevitable</div>
             </div>
           </div>
         </div>
       </section>
-      <section id="story-2" class="section reverse">
+      <section class="section">
         <div class="pad">
           <div class="container">
-            <div class="layout">
-              <div class="heading">same is true for stupidity</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="story-3" class="section">
-        <div class="pad">
-          <div class="container">
-            <div class="layout">
-              <div class="heading">so let us show the world</div>
-              <div class="heading">what true stupidity looks like</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="story-4" class="section reverse">
-        <div class="pad">
-          <div class="container">
-            <div class="layout">
-              <div class="heading">let us show them</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="story-5" class="section">
-        <div class="pad">
-          <div class="container">
-            <div class="layout">
-              <div class="heading">what we do</div>
-              <div class="heading">in the</div>
-              <div class="heading">shadows</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="story-6" class="section reverse">
-        <div class="pad">
-          <div class="container">
-            <div class="layout">
-              <div class="heading">coming soon, i think</div>
+            <div class="layout" id="inevitable">
+              <script src="sektch-inevi.js"></script>
             </div>
           </div>
         </div>
