@@ -179,7 +179,7 @@ var s1 = function( sketch ){
         sketch.text('go with the flow', (sketch.width / 2), (sketch.height / 2));
         sketch.text('we will all be dead soon', (sketch.width / 2), (sketch.height / 2) + (rfs - rbuf));
         sketch.textFont(font, rfs / 4);
-        sketch.text("just like this page, you'll never see the same thing again", (sketch.width / 2), sketch.height - (sketch.height / 4)); 
+        sketch.text("just like this pattern, you'll never see the same one again", (sketch.width / 2), sketch.height - (sketch.height / 4)); 
 
         
         
