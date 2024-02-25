@@ -12,7 +12,6 @@ var s1 = function( sketch ){
     let options = []
     let circles = [];
     let rfs;
-    let rbuf;
     let circle;
     let numX, numY;
     let cX, cY;
@@ -109,9 +108,9 @@ var s1 = function( sketch ){
     }
 
     sketch.draw = function() {
-        sketch.background(30);
-        sketch.fill(200);
-        sketch.frameRate(10);
+        sketch.background(200);
+        sketch.fill(30);
+        sketch.frameRate(15);
         // since the starting point isn't considered
         sketch.circle(map[start.x][start.y].x, map[start.x][start.y].y, CIRCLE_D);
 
@@ -172,15 +171,17 @@ var s1 = function( sketch ){
             sketch.rect(history[i][0] - 1, history[i][1] - 1, history[i][2], history[i][3]);
         }
         
-        sketch.fill(200);
+        sketch.fill(30);
         sketch.textAlign(sketch.CENTER, sketch.BOTTOM);
         sketch.textFont(font, rfs);
-        sketch.text('change is inevitable', (sketch.width / 2), (sketch.height / 2) - (rfs - rbuf));
-        sketch.text('go with the flow', (sketch.width / 2), (sketch.height / 2));
-        sketch.text('we will all be dead soon', (sketch.width / 2), (sketch.height / 2) + (rfs - rbuf));
-        sketch.textFont(font, rfs / 4);
-        sketch.text("just like this pattern, you'll never see the same one again", (sketch.width / 2), sketch.height - (sketch.height / 4)); 
-
+        // sketch.text('change is inevitable', (sketch.width / 2), (sketch.height / 2) - (rfs - rbuf));
+        // sketch.text('go with the flow', (sketch.width / 2), (sketch.height / 2));
+        // sketch.text('we will all be dead soon', (sketch.width / 2), (sketch.height / 2) + (rfs - rbuf));
+        // sketch.textFont(font, rfs / 4);
+        // sketch.text("just like this pattern, you'll never see the same one again", (sketch.width / 2), sketch.height - (sketch.height / 4)); 
+        sketch.text('inevitable !', (sketch.width / 2), (sketch.height / 2) - (rfs - rbuf));
+        sketch.text('irreversible !', (sketch.width / 2), (sketch.height / 2));
+        sketch.text('inconsequential ?', (sketch.width / 2), (sketch.height / 2) + (rfs - rbuf));
         
         
 
@@ -201,6 +202,9 @@ var s1 = function( sketch ){
     }
 
     sketch.windowResized = function() {
+        sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
+        rfs = (FSIZE / sketch.windowWidth) * sketch.width;
+        rbuf = (BUF / sketch.windowWidth) * sketch.width;
     }
 }
 
