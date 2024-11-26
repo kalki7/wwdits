@@ -69,13 +69,13 @@ var s1 = function( sketch ){
         sketch.text('do in the', (sketch.width / 2) - mouseNorm * 0.1, (sketch.height / 2));
         sketch.text('shadows', (sketch.width / 2), (sketch.height / 2) + (rfs - rbuf));
 
-        sketch.textAlign(sketch.RIGHT, sketch.BOTTOM);
-        sketch.textFont(font, rfs/3);
-        sketch.text("order", (sketch.width / 2) - a / 2.5, sketch.height - (sketch.height / 6));
+        // sketch.textAlign(sketch.RIGHT, sketch.BOTTOM);
+        // sketch.textFont(font, rfs/3);
+        // sketch.text("order", (sketch.width / 2) - a / 2.5, sketch.height - (sketch.height / 6));
 
-        sketch.textAlign(sketch.LEFT, sketch.BOTTOM);
-        sketch.textFont(font, rfs/3);
-        sketch.text("chaos", (sketch.width / 2) + a / 2.5, sketch.height - (sketch.height / 6)); 
+        // sketch.textAlign(sketch.LEFT, sketch.BOTTOM);
+        // sketch.textFont(font, rfs/3);
+        // sketch.text("chaos", (sketch.width / 2) + a / 2.5, sketch.height - (sketch.height / 6)); 
 
         // textFont(font, rfs / 3);
         // text("|", (width / 2), height - (height / 6));

@@ -25,7 +25,7 @@ var s1 = function( sketch ){
         sketch.textFont(font, rfs);
         sketch.textSize(100);
         sketch.text(timer, (sketch.width / 2), (sketch.height / 2));
-        if (sketch.frameCount % 60 == 0 && timer > -1) {
+        if (sketch.frameCount % 60 == 0) {
             timer --;
         }
         if (timer == -1) {
