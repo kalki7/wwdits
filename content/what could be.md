@@ -1,0 +1,7 @@
+to think about the future is to have hope that it exists.
+
+my ideas of what could be never stemmed from current reality. it would always be a branch of some alternate universe where everything was ideal. what is ideal? unlike plato's world of forms, it wasn't some world where everything has an ideal form, but rather where i was a lot more present, a lot more in control. at the end of the day it's all about control.
+
+since i lack control in the present, what could be, for me would always be how things would turn out if i had control in the present and how the future with control would look. control sounds like such a narcissistic word. i want control. but do i really want control? i don't care for control, but i'm forced to care for the anxiety in my brain which is somehow affecting my gut as well (later i read the body keeps score). so it was never about control, it was to get rid of anxiety, i needed control. so i'd just imagine what could be when i had 0 anxiety.
+
+apart from what [[i want]]ed, there was another bit of what [[i wish]]ed. you might be thinking they're the same, but in contrast, one was born from optimism and hope while the other was soaked and marinated in pessimism.
