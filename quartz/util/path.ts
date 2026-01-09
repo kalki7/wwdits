@@ -79,6 +79,11 @@ export function slugifyFilePath(fp: FilePath, excludeExt?: boolean): FullSlug {
 
   let slug = sluggify(withoutFileExt)
 
+  // treat what-we-do-in-the-shadows as index
+  if (slug === "what-we-do-in-the-shadows") {
+    slug = "index"
+  }
+
   // treat _index as index
   if (endsWith(slug, "_index")) {
     slug = slug.replace(/_index$/, "index")
