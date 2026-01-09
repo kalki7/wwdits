@@ -4,3 +4,5 @@ a went for a particular workshop which helped me start understanding more about 
 
 i first struggled with the sense of belonging at first and then accepted duality in a sense that i can exist both here and there, i can be both. but that didn't solve the conflicts that the two had.
 although it eventually did morph into a single organism, i never dropped the theatrics. so if you find me talking a lot in theatrical terms, you can blame this.
+
+along with that it helped me understand how to handle this duality in the presence of others, how to switch and swap, slowly it evolved in improv, handling actions and reactions from others and growing something of my own. this works of stage as well.
