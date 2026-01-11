@@ -6,4 +6,4 @@ that's because acceptance doesn't truly require logic, it required [[belief]]. y
 
 what we see hear taste feel smell are all just electrical signals sent to the brain and the brain reconstructs a version of reality in your head. so we choose to believe that the version of reality we have is true.
 
-so if you [[believe in an idea]] strong enough, you can share [[your reality]] how ever you'd like.
+so if you believe in an idea strong enough, you can share [[your reality]] how ever you'd like.

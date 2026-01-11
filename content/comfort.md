@@ -1,0 +1,5 @@
+for someone reason i feel that i've only been able to find comfort in being active. having a routine i built. staying at my parents place is definitely a lot more comfortable. i wake up and the sheets are folded, i throw my clothes to the floor and they're washed, i need to walk to the kitchen and there's a 4 course meal waiting. this is definitely the pinnacle of comfort, but it also mad me extremely [[lethargic]]
+
+when everything happens on it own, i had no motivation to do anything, but when i moved out, i'd put my brain to work on the smallest of things. what to eat, how to cook, when to clean, been to long since i cleaned, need to wash, need to fold, etc. and these tasks would somehow trigger me into doing a whole lot more.
+
+being of out the comfort zone helps me get into a different kind of [[zone]].
