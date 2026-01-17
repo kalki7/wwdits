@@ -1,3 +1,0 @@
-hypothetically, if i've gotten everything [[i want]]ed and everything [[i wish]]ed for, would i start feeling something on it own? [[idk]]
-
-tbd

@@ -1,7 +1,7 @@
 what is nothing,
 
 is it the presence of nothing,
-or the lack of presence of something
+or the lack of presence of [[something]]
 
 in that case what's something?
 
@@ -9,4 +9,4 @@ i'd say nothing is a void, it's empty, it's not black, black is a colour, it's s
 
 you can feel something, you can't feel nothing, so then what do [[i feel]], the lack of something
 
-but which [[something is lacking]]?
+but which [[something]] is lacking?

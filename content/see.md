@@ -1,0 +1,1 @@
+although we can see, we only choose to see what we want to see. [[perspective]]s. you see and understand what you see only because of where you're seeing it from.

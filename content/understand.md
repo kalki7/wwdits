@@ -1,0 +1,1 @@
+to understand is to know, to empathise, to empathise is to [[be kind]]
