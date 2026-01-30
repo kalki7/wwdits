@@ -10,6 +10,6 @@ i am a little [[mad]]
 i am a bit shy
 i am not creative at all
 i am unable to think
-i am a not happy with what i am
+i am not happy with what i am
 
 but, [[i want]]
