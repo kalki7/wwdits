@@ -1,0 +1,1 @@
+one of my biggest [[fear]]s, being boring. being seen as a boring person kills me. i don't want to be boring, i want to be whatever the opposite of boring is. i want to be not boring. because if i'm boring. there's no reason for people to talk to me, to interact with me. if i'm boring, i'll end up [[lonely]] with no friends.
