@@ -241,7 +241,7 @@
         const index = await loadIndex();
         const shard = pickWeightedShard(index.shards);
 
-        statusEl.textContent = `Loading ${shard.file}...`;
+        statusEl.textContent = `Loading...`; //${shard.file}
         const entries = await fetchJson(`site_data/${shard.file}`);
 
         if (!Array.isArray(entries) || entries.length === 0) {
