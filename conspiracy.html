@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DECOMPRESSION TERMINAL // CTC-08</title>
+  <style>
+    /* CSS Variables */
+    :root {
+      --bg-color: #030508;
+      --crt-green: #33ff66;
+      --crt-green-glow: rgba(51, 255, 102, 0.25);
+      --crt-amber: #ffb000;
+      --crt-amber-glow: rgba(255, 176, 0, 0.25);
+      --crt-red: #ff3333;
+      --panel-border: #1a2f1d;
+      --panel-bg: rgba(5, 10, 7, 0.85);
+      --scanline-opacity: 0.08;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--crt-green);
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    /* CRT Scanline & Screen Flickering Effects */
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 9999;
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
+      z-index: 9998;
+      pointer-events: none;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.98; }
+      50% { opacity: 1; }
+      100% { opacity: 0.99; }
+    }
+
+    .crt-screen {
+      animation: flicker 0.15s infinite;
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Terminal Panels */
+    .terminal-header {
+      border: 1px solid var(--panel-border);
+      background-color: var(--panel-bg);
+      padding: 15px 20px;
+      border-radius: 4px;
+      box-shadow: 0 0 15px rgba(26, 47, 29, 0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .header-logo {
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 0 0 5px var(--crt-green);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-light {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--crt-amber);
+      box-shadow: 0 0 8px var(--crt-amber);
+      display: inline-block;
+    }
+
+    .status-light.active {
+      background-color: var(--crt-green);
+      box-shadow: 0 0 8px var(--crt-green);
+      animation: pulse 1s infinite alternate;
+    }
+
+    .status-light.warning {
+      background-color: var(--crt-red);
+      box-shadow: 0 0 8px var(--crt-red);
+      animation: blink 0.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      100% { transform: scale(1.1); opacity: 1; }
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+
+    /* Main Console Grid */
+    .terminal-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .terminal-grid {
+        grid-template-columns: 3fr 2fr;
+      }
+    }
+
+    .panel {
+      border: 1px solid var(--panel-border);
+      background-color: var(--panel-bg);
+      border-radius: 4px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      position: relative;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid transparent;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--panel-border);
+      padding-bottom: 5px;
+      color: var(--crt-amber);
+      text-shadow: 0 0 5px var(--crt-amber-glow);
+    }
+
+    /* Redacted Blocks */
+    .redacted {
+      background-color: #1a2f1d;
+      color: #1a2f1d;
+      padding: 0 4px;
+      border-radius: 2px;
+      user-select: none;
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    .redacted.revealed {
+      background-color: transparent;
+      color: inherit;
+      user-select: text;
+      text-shadow: 0 0 3px var(--crt-green);
+    }
+
+    /* Countdown Display */
+    .timer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .countdown-display {
+      font-size: clamp(3.5rem, 10vw, 5rem);
+      font-weight: bold;
+      font-family: monospace;
+      letter-spacing: 4px;
+      color: var(--crt-green);
+      text-shadow: 0 0 10px var(--crt-green-glow);
+      background-color: rgba(0, 10, 5, 0.6);
+      padding: 10px 30px;
+      border-radius: 4px;
+      border: 1px solid var(--panel-border);
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .countdown-display.sync-broken {
+      color: var(--crt-amber);
+      text-shadow: 0 0 15px var(--crt-amber-glow);
+      border-color: var(--crt-amber);
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .btn {
+      flex: 1;
+      background-color: transparent;
+      border: 1px solid var(--panel-border);
+      color: var(--crt-green);
+      padding: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.85rem;
+    }
+
+    .btn:hover:not(:disabled) {
+      background-color: var(--panel-border);
+      color: #fff;
+      box-shadow: 0 0 10px var(--crt-green-glow);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .btn-warning {
+      color: var(--crt-amber);
+      border-color: rgba(255, 176, 0, 0.4);
+    }
+
+    .btn-warning:hover:not(:disabled) {
+      background-color: rgba(255, 176, 0, 0.15);
+      color: #fff;
+      box-shadow: 0 0 10px var(--crt-amber-glow);
+    }
+
+    /* Live Transmissions Console */
+    .console-log {
+      height: 200px;
+      overflow-y: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--panel-border);
+      padding: 10px;
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-radius: 4px;
+      scroll-behavior: smooth;
+    }
+
+    .console-line {
+      line-height: 1.4;
+      border-left: 2px solid var(--crt-green);
+      padding-left: 8px;
+    }
+
+    .console-line.sys {
+      color: var(--crt-amber);
+      border-color: var(--crt-amber);
+    }
+
+    .console-line.warn {
+      color: var(--crt-red);
+      border-color: var(--crt-red);
+      animation: flicker 0.2s infinite;
+    }
+
+    .console-line.success {
+      color: #55ff55;
+      border-color: #55ff55;
+    }
+
+    /* Progress Indicators */
+    .progress-bar-container {
+      width: 100%;
+      height: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--panel-border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background-color: var(--crt-green);
+      box-shadow: 0 0 8px var(--crt-green-glow);
+      transition: width 0.3s ease;
+    }
+
+    .progress-bar.warning {
+      background-color: var(--crt-amber);
+      box-shadow: 0 0 8px var(--crt-amber-glow);
+    }
+
+    /* Info Sidebar details */
+    .info-item {
+      margin-bottom: 12px;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .info-label {
+      color: var(--crt-amber);
+      font-weight: bold;
+    }
+
+    /* Stillness Meter */
+    .stillness-container {
+      margin-top: 15px;
+      border: 1px dashed var(--panel-border);
+      padding: 12px;
+      border-radius: 4px;
+    }
+
+    .stillness-status {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+    }
+
+    /* Footer & Navigation */
+    .terminal-footer {
+      border: 1px solid var(--panel-border);
+      background-color: var(--panel-bg);
+      padding: 12px;
+      text-align: center;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-link {
+      color: var(--crt-amber);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--crt-amber);
+      padding-bottom: 2px;
+      transition: all 0.2s;
+    }
+
+    .footer-link:hover {
+      color: #fff;
+      border-color: #fff;
+      text-shadow: 0 0 5px var(--crt-amber-glow);
+    }
+
+    /* Redacted Vault / Unlocked Section */
+    .unlocked-vault {
+      display: none;
+      animation: fadeIn 1.5s ease-out forwards;
+      border: 1px solid var(--crt-amber);
+      background: rgba(15, 10, 0, 0.9);
+      padding: 20px;
+      border-radius: 4px;
+      margin-top: 20px;
+      box-shadow: 0 0 25px rgba(255, 176, 0, 0.35);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .vault-banner {
+      color: var(--crt-amber);
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px var(--crt-amber-glow);
+      border-bottom: 2px double var(--crt-amber);
+      padding-bottom: 8px;
+    }
+
+    .vault-content {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .vault-signature {
+      margin-top: 15px;
+      text-align: right;
+      font-style: italic;
+      color: var(--crt-amber);
+    }
+
+    /* Custom Scrollbar for terminal logs */
+    .console-log::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .console-log::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .console-log::-webkit-scrollbar-thumb {
+      background: var(--panel-border);
+      border-radius: 3px;
+    }
+
+    .console-log::-webkit-scrollbar-thumb:hover {
+      background: var(--crt-green);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="crt-screen">
+    
+    <!-- Header -->
+    <header class="terminal-header">
+      <div class="header-logo" id="headerLogo" title="Double-click 5 times for Developer Bypass">
+        [CTC-DECRYPTOR // SYNC-8]
+      </div>
+      <div class="header-status">
+        <span class="status-label" id="statusLabel">SYNC SECURED</span>
+        <span class="status-light active" id="statusLight"></span>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="terminal-grid">
+      
+      <!-- Primary Decompression Panel -->
+      <section class="panel">
+        <h2 class="panel-title">> ATTENTION SYNCHRONIZATION CONSOLE</h2>
+        <p style="font-size: 0.8rem; line-height: 1.5; margin-bottom: 15px;">
+          The <span class="redacted" id="r1">Consortium of Temporal Compression (CTC)</span> has locked your neural cognitive rate into exactly 8-minute intervals. 
+          To break the cycle and unlock the decrypted archives, you must trigger the <strong>Decompression Protocol</strong>.
+        </p>
+        
+        <div class="timer-container">
+          <div class="countdown-display" id="timerDisplay">01:00</div>
+          
+          <div class="timer-controls">
+            <button class="btn" id="startBtn">ACTIVATE SYS</button>
+            <button class="btn btn-warning" id="pauseBtn" disabled>SUSPEND</button>
+            <button class="btn btn-warning" id="resetBtn">RESET</button>
+          </div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Stillness Status -->
+        <div class="stillness-container">
+          <div class="stillness-status">
+            <span>STILLNESS SENSOR METRIC:</span>
+            <span id="stillnessValue" style="color: var(--crt-green); font-weight: bold;">STABLE (100%)</span>
+          </div>
+          <p style="font-size: 0.7rem; color: #8a9f8d; line-height: 1.3;">
+            *Attention-harvesting mechanisms require physical movement (cursor tracking) to confirm focus. Keeping the cursor absolutely still inside this panel destabilizes the CTC bandwidth sync.
+          </p>
+        </div>
+      </section>
+
+      <!-- Logs & Secondary Details -->
+      <section class="panel">
+        <h2 class="panel-title">> CONSOLE LOGGER (LIVE DATA)</h2>
+        <div class="console-log" id="consoleLog">
+          <div class="console-line sys">[SYS] BOOT COMPLETE. HARDWARE SYNCHRONIZATION AT 100%.</div>
+          <div class="console-line">[SYS] COMPRESSED DECOMPRESSION PROTOCOL DETECTED (1M OVERRIDE).</div>
+          <div class="console-line">[SYS] STANDBY. WAITING FOR DECOMPRESSION INITIATIVE...</div>
+        </div>
+
+        <div style="margin-top: 15px;">
+          <h3 style="font-size: 0.8rem; color: var(--crt-amber); margin-bottom: 8px; text-transform: uppercase;">> Intelligence Brief</h3>
+          <div class="info-item">
+            <span class="info-label">Framework A:</span> Wilbur's Existential Threat model notes that the CTC relies on <span class="redacted" id="r2">Secrecy</span> and <span class="redacted" id="r3">Agency Attribution</span> to remain unfalsifiable.
+          </div>
+          <div class="info-item">
+            <span class="info-label">Framework B:</span> Charles Pigden argues that dismissals of time-compression theories are based on a <span class="redacted" id="r4">Tonkish runabout inference-ticket</span>. Analyze the individual merits!
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Redacted Vault / Unlocked Section -->
+    <section class="unlocked-vault" id="unlockedVault">
+      <div class="vault-banner">*** DECRYPTED MEMO // CTC INTEL UNLOCKED ***</div>
+      <div class="vault-content">
+        <p><strong>TO:</strong> All Regional Directors of attention harvesting (CTC Core)</p>
+        <p><strong>SUBJECT:</strong> Phase 4 Focus Division (The "8-Hour Weekend" Expansion)</p>
+        <p style="border-left: 2px solid var(--crt-amber); padding-left: 10px; font-style: italic;">
+          "The success of the 8-minute synchronization threshold on YouTube, combined with Simon Sinek's viral behavioral engineering framework (Rule of 8 Minutes), has exceeded expectations. Subject attention spans have successfully crystallized into precisely 480-second blocks. Subjects can no longer focus on complex systemic problems, ensuring total stability for corporate operations."
+        </p>
+        <p><strong>NEXT OBJECTIVE:</strong> Prepare the psychological roll-out for compressing standard recreational time-units into 8-hour modular weekends, sold back as 'Premium Focus-Boost packages'.</p>
+        <p style="color: var(--crt-green); font-weight: bold; margin-top: 10px; border: 1px dashed var(--crt-green); padding: 10px; text-align: center;">
+          CONGRATULATIONS. YOU HAVE BROKEN THE ATTENTION HARVEST. You stayed still, questioned the "tonkish" dismissal, and evaluated the evidence on its individual merits (Pigden Particularism). Now, spread the word—or don't, lest they find your drift.
+        </p>
+        <div class="vault-signature">— CTC ARCHITECTS // CLASS-09 DECRYPTION</div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="terminal-footer">
+      <div>CLOCK FREQ: 8.20 Hz (SOLAR MATCH)</div>
+      <div>
+        <a href="wwdits.html" class="footer-link">← RETURN TO RANDOM NOTES</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Terminal Audio Elements (Simulated or Procedural via Web Audio API) -->
+  <script>
+    // Constants
+    const TOTAL_TIME = 1 * 60; // Compressed to 1 minute as requested
+    let timeLeft = TOTAL_TIME;
+    let timerInterval = null;
+    let isRunning = false;
+    let stillnessScore = 100;
+    let lastMoveTime = Date.now();
+    let moveCounter = 0;
+    let clickCount = 0;
+
+    // DOM Elements
+    const timerDisplay = document.getElementById("timerDisplay");
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const progressBar = document.getElementById("progressBar");
+    const consoleLog = document.getElementById("consoleLog");
+    const statusLight = document.getElementById("statusLight");
+    const statusLabel = document.getElementById("statusLabel");
+    const stillnessValue = document.getElementById("stillnessValue");
+    const unlockedVault = document.getElementById("unlockedVault");
+    const headerLogo = document.getElementById("headerLogo");
+    
+    // Redacted Elements
+    const redactedElements = [
+      document.getElementById("r1"),
+      document.getElementById("r2"),
+      document.getElementById("r3"),
+      document.getElementById("r4")
+    ];
+
+    // Web Audio Synthesizer (for high-signal retro experience)
+    let audioCtx = null;
+    let humOscillator = null;
+
+    function initAudio() {
+      if (audioCtx) return;
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        logToConsole("[SYS] Web Audio not supported in this client browser.", "warn");
+      }
+    }
+
+    function playBeep(freq, duration, type = "sine", volume = 0.05) {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function startBackgroundHum() {
+      if (!audioCtx) return;
+      try {
+        humOscillator = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        humOscillator.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        humOscillator.type = "sawtooth";
+        humOscillator.frequency.value = 55; // Low-frequency resonant A hum
+        
+        // Very quiet lowpass filter to make it organic
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.value = 100;
+        
+        humOscillator.disconnect(gain);
+        humOscillator.connect(filter);
+        filter.connect(gain);
+
+        gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+        humOscillator.start();
+      } catch (e) {}
+    }
+
+    function stopBackgroundHum() {
+      if (humOscillator) {
+        try {
+          humOscillator.stop();
+          humOscillator = null;
+        } catch (e) {}
+      }
+    }
+
+    // Console Logging Helper
+    function logToConsole(text, type = "normal") {
+      const line = document.createElement("div");
+      line.className = `console-line ${type}`;
+      
+      const time = new Date().toLocaleTimeString();
+      line.innerHTML = `[${time}] ${text}`;
+      
+      consoleLog.appendChild(line);
+      consoleLog.scrollTop = consoleLog.scrollHeight;
+    }
+
+    // Formatter
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // CTC Transmissions triggered matching the "8-second" theme
+    function checkTransmissions(seconds) {
+      const elapsed = TOTAL_TIME - seconds;
+      if (elapsed > 0 && elapsed % 8 === 0) {
+        playBeep(220, 0.4, "triangle", 0.08);
+        
+        switch (elapsed) {
+          case 8:
+            logToConsole("[CTC] 8-MINUTE RECURSION ALIGNED. NEURAL BANDWIDTH MAPPED.", "normal");
+            break;
+          case 16:
+            logToConsole("[CTC] SINEK PROTOCOL DETECTED. EMPATHIC SYNC IN PROGRESS...", "normal");
+            break;
+          case 24:
+            logToConsole("[SYS] WARNING: COGNITIVE RESISTANCE EXCEEDS NORMAL THRESHOLDS.", "sys");
+            break;
+          case 32:
+            logToConsole("[CTC] HARVESTING SOLAR TRAVEL ENERGY WINDOW (8M 20S CONSTANT).", "normal");
+            break;
+          case 40:
+            logToConsole("[CTC] SNOOZE LIMIT VERIFIED. CIRCADIAN CAPTURE STATUS: NOMINAL.", "normal");
+            break;
+          case 48:
+            logToConsole("[SYS] EMERGENCY COGNITIVE REFUGE STAGE 2 REACHED.", "sys");
+            break;
+          case 56:
+            logToConsole("[CTC] DRIFT VERIFICATION CRITICAL. REMAIN PASSIVE.", "normal");
+            break;
+        }
+      }
+    }
+
+    // Update Timer display & progress bar
+    function updateTimerDisplay() {
+      timerDisplay.textContent = formatTime(timeLeft);
+      const percentage = ((TOTAL_TIME - timeLeft) / TOTAL_TIME) * 100;
+      progressBar.style.width = `${percentage}%`;
+    }
+
+    // Game Core: Stillness Tracking
+    // Stillness is broken if they move their cursor *inside* the panel too rapidly.
+    document.addEventListener("mousemove", (e) => {
+      if (!isRunning) return;
+      
+      const now = Date.now();
+      if (now - lastMoveTime < 100) return; // limit check rate
+      lastMoveTime = now;
+
+      // Increment movement counter
+      moveCounter++;
+      
+      if (moveCounter > 5) {
+        stillnessScore = Math.max(0, stillnessScore - 8);
+        updateStillnessUI();
+        
+        if (stillnessScore < 40) {
+          playBeep(110, 0.1, "square", 0.04);
+          logToConsole("[WARNING] TEMPORAL DRIFT DETECTED. PHYSICAL MOVEMENT DESTABILIZES SYNC.", "warn");
+          
+          // Punish them slightly by adding 1 second if stillness is severely broken (scaled for 1m limit)
+          timeLeft = Math.min(TOTAL_TIME, timeLeft + 1);
+          updateTimerDisplay();
+          
+          statusLight.className = "status-light warning";
+          statusLabel.textContent = "SYNC THREATENED";
+        }
+        moveCounter = 0;
+      }
+    });
+
+    // Recover stillness over time
+    setInterval(() => {
+      if (isRunning && stillnessScore < 100) {
+        stillnessScore = Math.min(100, stillnessScore + 3);
+        updateStillnessUI();
+        
+        if (stillnessScore >= 70 && statusLight.className.includes("warning")) {
+          statusLight.className = "status-light active";
+          statusLabel.textContent = "SYNC SECURED";
+        }
+      }
+    }, 1000);
+
+    function updateStillnessUI() {
+      stillnessValue.textContent = `STABLE (${stillnessScore}%)`;
+      if (stillnessScore > 70) {
+        stillnessValue.style.color = "var(--crt-green)";
+      } else if (stillnessScore > 35) {
+        stillnessValue.style.color = "var(--crt-amber)";
+        stillnessValue.textContent = `DRIFTING (${stillnessScore}%)`;
+      } else {
+        stillnessValue.style.color = "var(--crt-red)";
+        stillnessValue.textContent = `CRITICAL (${stillnessScore}%)`;
+      }
+    }
+
+    // Unlock Sequence
+    function unlockVault() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      stopBackgroundHum();
+      
+      playBeep(880, 0.2, "sine", 0.1);
+      setTimeout(() => playBeep(1046.5, 0.25, "sine", 0.1), 150);
+      setTimeout(() => playBeep(1318.51, 0.4, "sine", 0.1), 300);
+      
+      statusLight.className = "status-light active";
+      statusLabel.textContent = "DECRYPTION SUCCESSFUL";
+      timerDisplay.className = "countdown-display sync-broken";
+      progressBar.className = "progress-bar";
+      progressBar.style.width = "100%";
+      
+      logToConsole("[SUCCESS] DECOMPRESSION PROTOCOL COMPLETE.", "success");
+      logToConsole("[SUCCESS] SYNCHRONIZATION BROKEN. ALL MEMORIES RELEASED.", "success");
+      
+      // Reveal redacted text blocks
+      redactedElements.forEach(el => el.classList.add("revealed"));
+      
+      // Display secret vault
+      unlockedVault.style.display = "block";
+      unlockedVault.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Standard Buttons Controls
+    startBtn.addEventListener("click", () => {
+      initAudio();
+      if (isRunning) return;
+      
+      isRunning = true;
+      startBtn.disabled = true;
+      pauseBtn.disabled = false;
+      
+      logToConsole("[SYS] INITIATING PROTOCOL... COGNITIVE SYNCHRONIZATION DISRUPTED.", "sys");
+      playBeep(440, 0.15, "sine", 0.05);
+      startBackgroundHum();
+      
+      timerInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateTimerDisplay();
+          checkTransmissions(timeLeft);
+          
+          // Subtle ticking sound
+          if (timeLeft % 2 === 0) {
+            playBeep(600, 0.01, "sine", 0.01);
+          } else {
+            playBeep(500, 0.01, "sine", 0.01);
+          }
+        } else {
+          unlockVault();
+        }
+      }, 1000);
+    });
+
+    pauseBtn.addEventListener("click", () => {
+      if (!isRunning) return;
+      
+      isRunning = false;
+      startBtn.disabled = false;
+      pauseBtn.disabled = true;
+      
+      clearInterval(timerInterval);
+      stopBackgroundHum();
+      playBeep(330, 0.2, "triangle", 0.05);
+      logToConsole("[SYS] DECOMPRESSION SUSPENDED. RE-ESTABLISHING COGNITIVE HARVEST...", "warn");
+    });
+
+    resetBtn.addEventListener("click", () => {
+      clearInterval(timerInterval);
+      isRunning = false;
+      stopBackgroundHum();
+      timeLeft = TOTAL_TIME;
+      stillnessScore = 100;
+      
+      startBtn.disabled = false;
+      pauseBtn.disabled = true;
+      statusLight.className = "status-light active";
+      statusLabel.textContent = "SYNC SECURED";
+      timerDisplay.className = "countdown-display";
+      progressBar.style.width = "0%";
+      
+      updateTimerDisplay();
+      updateStillnessUI();
+      
+      redactedElements.forEach(el => el.classList.remove("revealed"));
+      unlockedVault.style.display = "none";
+      
+      logToConsole("[SYS] TIMER RESET TO ZERO STATE. DECOMPRESSION INACTIVE.", "sys");
+      playBeep(220, 0.2, "sine", 0.05);
+    });
+
+    // Developer Bypass (Anti-Frustration Shortcut)
+    // Double-clicking the header logo 5 times instantly sets the timer to 5 seconds.
+    headerLogo.addEventListener("click", () => {
+      clickCount++;
+      if (clickCount >= 5) {
+        initAudio();
+        clickCount = 0;
+        if (isRunning) {
+          timeLeft = 5;
+          updateTimerDisplay();
+          logToConsole("[BYPASS] DEVELOPER INTERVENTION CONFIRMED. SHORTCUTTING BUFFER SYSTEM.", "warn");
+          playBeep(1760, 0.1, "sine", 0.1);
+        } else {
+          logToConsole("[BYPASS] SYSTEM MUST BE RUNNING TO TRIGGER THE TEMPORAL SHORTCUT.", "warn");
+        }
+      }
+      
+      // Reset bypass count if no clicks for 3 seconds
+      setTimeout(() => {
+        clickCount = 0;
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
