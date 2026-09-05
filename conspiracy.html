@@ -481,7 +481,7 @@
         </p>
         
         <div class="timer-container">
-          <div class="countdown-display" id="timerDisplay">01:00</div>
+          <div class="countdown-display" id="timerDisplay">08:00</div>
           
           <div class="timer-controls">
             <button class="btn" id="startBtn">ACTIVATE SYS</button>
@@ -511,7 +511,6 @@
         <h2 class="panel-title">> CONSOLE LOGGER (LIVE DATA)</h2>
         <div class="console-log" id="consoleLog">
           <div class="console-line sys">[SYS] BOOT COMPLETE. HARDWARE SYNCHRONIZATION AT 100%.</div>
-          <div class="console-line">[SYS] COMPRESSED DECOMPRESSION PROTOCOL DETECTED (1M OVERRIDE).</div>
           <div class="console-line">[SYS] STANDBY. WAITING FOR DECOMPRESSION INITIATIVE...</div>
         </div>
 
@@ -558,7 +557,7 @@
   <!-- Terminal Audio Elements (Simulated or Procedural via Web Audio API) -->
   <script>
     // Constants
-    const TOTAL_TIME = 1 * 60; // Compressed to 1 minute as requested
+    const TOTAL_TIME = 8 * 60; // 8 minutes in seconds
     let timeLeft = TOTAL_TIME;
     let timerInterval = null;
     let isRunning = false;
@@ -672,33 +671,33 @@
       return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
 
-    // CTC Transmissions triggered matching the "8-second" theme
+    // CTC Transmissions at minute increments
     function checkTransmissions(seconds) {
-      const elapsed = TOTAL_TIME - seconds;
-      if (elapsed > 0 && elapsed % 8 === 0) {
+      if (seconds % 60 === 0 && seconds !== TOTAL_TIME) {
+        const minutesLeft = seconds / 60;
         playBeep(220, 0.4, "triangle", 0.08);
         
-        switch (elapsed) {
-          case 8:
-            logToConsole("[CTC] 8-MINUTE RECURSION ALIGNED. NEURAL BANDWIDTH MAPPED.", "normal");
+        switch (minutesLeft) {
+          case 7:
+            logToConsole("[CTC] BANDWIDTH OPTIMIZATION COMMENCED. DO NOT SHIFT GAZE.", "normal");
             break;
-          case 16:
-            logToConsole("[CTC] SINEK PROTOCOL DETECTED. EMPATHIC SYNC IN PROGRESS...", "normal");
+          case 6:
+            logToConsole("[CTC] HARVESTING COGNITIVE DRIFT... SUB-SYNCHRONIZATION: 25%.", "normal");
             break;
-          case 24:
-            logToConsole("[SYS] WARNING: COGNITIVE RESISTANCE EXCEEDS NORMAL THRESHOLDS.", "sys");
+          case 5:
+            logToConsole("[SYS] WARNING: CRITICAL RESISTANCE TO 8-MINUTE ATTENTION STANDARD DETECTED.", "sys");
             break;
-          case 32:
-            logToConsole("[CTC] HARVESTING SOLAR TRAVEL ENERGY WINDOW (8M 20S CONSTANT).", "normal");
+          case 4:
+            logToConsole("[CTC] SINEK-LOOP CONFIRMED. COMPRESSING EMPATHIC INTERVALS TO 480 SECONDS.", "normal");
             break;
-          case 40:
-            logToConsole("[CTC] SNOOZE LIMIT VERIFIED. CIRCADIAN CAPTURE STATUS: NOMINAL.", "normal");
+          case 3:
+            logToConsole("[CTC] SOLAR LIGHT RADIATION COORDINATION MATCH COMPLETE. DRIFT ACCURACY: NOMINAL.", "normal");
             break;
-          case 48:
-            logToConsole("[SYS] EMERGENCY COGNITIVE REFUGE STAGE 2 REACHED.", "sys");
+          case 2:
+            logToConsole("[SYS] WARNING: COGNITIVE DECOMPRESSION THRESHOLD EXCEEDS 75%.", "sys");
             break;
-          case 56:
-            logToConsole("[CTC] DRIFT VERIFICATION CRITICAL. REMAIN PASSIVE.", "normal");
+          case 1:
+            logToConsole("[CTC] PREPARE FOR FULL HARVEST PHASE. SUBSTANTIAL ANXIETY SYNERGY SECURED.", "normal");
             break;
         }
       }
@@ -731,8 +730,8 @@
           playBeep(110, 0.1, "square", 0.04);
           logToConsole("[WARNING] TEMPORAL DRIFT DETECTED. PHYSICAL MOVEMENT DESTABILIZES SYNC.", "warn");
           
-          // Punish them slightly by adding 1 second if stillness is severely broken (scaled for 1m limit)
-          timeLeft = Math.min(TOTAL_TIME, timeLeft + 1);
+          // Punish them slightly by adding 5 seconds if stillness is severely broken
+          timeLeft = Math.min(TOTAL_TIME, timeLeft + 5);
           updateTimerDisplay();
           
           statusLight.className = "status-light warning";
