@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THE GEOGRAPHY OF COGNITIVE COLLAPSE // RESEARCH REPORT</title>
+  <title>THE UNDERTONES OF SOLITUDE // REFLECTIVE STUDY</title>
   <style>
     :root {
-      --bg: #030508;
+      --bg: #05070b;
       --panel: #0b0f17;
       --panel-border: #1f2937;
       --text: #f3f4f6;
       --muted: #9ca3af;
-      --accent: #3b82f6;
-      --accent-glow: rgba(59, 130, 246, 0.15);
+      --accent: #d1d5db;
+      --accent-glow: rgba(255, 255, 255, 0.05);
+      --amber-accent: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.1);
       --red-accent: #ef4444;
-      --red-glow: rgba(239, 68, 68, 0.15);
       --font-mono: 'Courier New', Courier, monospace;
       --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     }
@@ -29,7 +30,7 @@
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-sans);
-      line-height: 1.6;
+      line-height: 1.7;
       padding: 40px 20px;
       min-height: 100vh;
       display: flex;
@@ -37,39 +38,25 @@
       align-items: center;
     }
 
-    /* Subtle background scanning line effect */
-    body::before {
-      content: " ";
-      display: block;
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
-      z-index: 9999;
-      background-size: 100% 4px;
-      pointer-events: none;
-    }
-
     .report-container {
       width: 100%;
-      max-width: 1000px;
+      max-width: 900px;
       display: flex;
       flex-direction: column;
-      gap: 30px;
+      gap: 35px;
     }
 
-    /* Terminal Header */
+    /* Introspective Header */
     .report-header {
       border: 1px solid var(--panel-border);
       background-color: var(--panel);
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
       display: flex;
       flex-direction: column;
       gap: 12px;
+      position: relative;
     }
 
     .header-top {
@@ -82,31 +69,31 @@
 
     .doc-id {
       font-family: var(--font-mono);
-      color: var(--accent);
+      color: var(--muted);
       font-weight: bold;
       letter-spacing: 2px;
       text-transform: uppercase;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
 
     .status-badge {
-      font-family: var(--font-mono);
-      background-color: var(--accent-glow);
-      border: 1px solid var(--accent);
-      color: var(--text);
+      font-family: var(--font-sans);
+      background-color: var(--amber-glow);
+      border: 1px solid var(--amber-accent);
+      color: var(--amber-accent);
       padding: 4px 12px;
-      border-radius: 4px;
+      border-radius: 20px;
       font-size: 0.75rem;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
     h1 {
       font-size: clamp(1.8rem, 5vw, 2.5rem);
       font-weight: 300;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       line-height: 1.2;
-      text-transform: uppercase;
-      margin: 10px 0;
+      text-transform: capitalize;
+      margin: 5px 0;
     }
 
     .meta-grid {
@@ -114,7 +101,7 @@
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       border-top: 1px solid var(--panel-border);
-      padding-top: 15px;
+      padding-top: 18px;
       font-family: var(--font-mono);
       font-size: 0.8rem;
       color: var(--muted);
@@ -124,34 +111,35 @@
       color: var(--text);
     }
 
-    /* Abstract Card */
+    /* Abstract / Introspective Overview */
     .abstract-card {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(0, 0, 0, 0));
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.015), rgba(0, 0, 0, 0));
       border: 1px solid var(--panel-border);
-      border-left: 4px solid var(--accent);
+      border-left: 3px solid var(--muted);
       border-radius: 12px;
       padding: 24px;
     }
 
     .abstract-title {
       font-family: var(--font-mono);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 10px;
-      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      letter-spacing: 1.5px;
     }
 
     .abstract-text {
       color: #d1d5db;
       font-size: 1.05rem;
-      line-height: 1.7;
+      line-height: 1.8;
+      text-align: justify;
     }
 
-    /* KPI Grid */
+    /* KPI Grid representing footprints of human emotion */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
     }
 
@@ -165,37 +153,30 @@
       align-items: center;
       text-align: center;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .kpi-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent);
     }
 
     .kpi-value {
       font-family: var(--font-mono);
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: bold;
       color: var(--text);
       margin-bottom: 5px;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     }
 
     .kpi-label {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       color: var(--muted);
       letter-spacing: 1px;
     }
 
-    /* Report Sections */
+    /* Sections */
     .section-title {
       font-family: var(--font-mono);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: var(--accent);
+      color: var(--text);
       margin-bottom: 15px;
       display: flex;
       align-items: center;
@@ -203,9 +184,26 @@
     }
 
     .section-title::before {
-      content: "//";
-      color: var(--red-accent);
-      font-weight: bold;
+      content: "◇";
+      color: var(--amber-accent);
+    }
+
+    .panel-card {
+      background-color: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .panel-card p {
+      color: #d1d5db;
+      margin-bottom: 18px;
+      text-align: justify;
+    }
+
+    .panel-card p:last-child {
+      margin-bottom: 0;
     }
 
     .grid-2col {
@@ -220,62 +218,43 @@
       }
     }
 
-    .panel-card {
-      background-color: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    .panel-card p {
-      color: #d1d5db;
-      margin-bottom: 15px;
-    }
-
-    /* Monospace Tables */
+    /* Elegant Tables */
     table {
       width: 100%;
       border-collapse: collapse;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
       margin: 15px 0;
     }
 
     th {
       text-align: left;
-      border-bottom: 2px solid var(--panel-border);
-      padding: 10px;
-      color: var(--accent);
+      border-bottom: 1.5px solid var(--panel-border);
+      padding: 12px 10px;
+      color: var(--muted);
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
     }
 
     td {
-      padding: 10px;
+      padding: 12px 10px;
       border-bottom: 1px solid #111827;
       color: #e5e7eb;
     }
 
     tr:hover td {
-      background-color: rgba(255, 255, 255, 0.02);
+      background-color: rgba(255, 255, 255, 0.015);
     }
 
-    /* Word Clouds section */
-    .wordcloud-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      margin-top: 15px;
-    }
-
+    /* Word Clouds Section */
     .wordcloud-wrapper {
       width: 100%;
       border: 1px solid var(--panel-border);
       border-radius: 12px;
       overflow: hidden;
-      background-color: #000;
+      background-color: #010204;
       display: flex;
       flex-direction: column;
     }
@@ -284,12 +263,14 @@
       width: 100%;
       height: auto;
       display: block;
-      filter: grayscale(15%) contrast(105%);
-      transition: filter 0.3s;
+      filter: grayscale(10%) contrast(102%);
+      opacity: 0.9;
+      transition: all 0.3s;
     }
 
     .wordcloud-wrapper img:hover {
       filter: grayscale(0%) contrast(100%);
+      opacity: 1;
     }
 
     .wordcloud-caption {
@@ -297,45 +278,42 @@
       background-color: #080c13;
       border-top: 1px solid var(--panel-border);
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--muted);
       text-align: center;
     }
 
-    /* Topic modeling items */
+    /* Topic modeling items structured as Emotional Archetypes */
     .topics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px;
     }
 
     .topic-card {
       background-color: var(--panel);
       border: 1px solid var(--panel-border);
-      border-top: 3px solid var(--accent);
+      border-left: 3px solid var(--muted);
       border-radius: 8px;
-      padding: 18px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      transition: transform 0.2s;
+      gap: 12px;
+      transition: all 0.2s;
     }
 
     .topic-card:hover {
       transform: translateY(-2px);
-    }
-
-    .topic-card.severe {
-      border-top-color: var(--red-accent);
+      border-left-color: var(--amber-accent);
     }
 
     .topic-id {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
     }
 
     .topic-name {
@@ -344,31 +322,37 @@
       color: var(--text);
     }
 
+    .topic-description {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+
     .topic-words {
       font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: #9ca3af;
+      font-size: 0.75rem;
+      color: #d1d5db;
       background-color: #06090e;
-      padding: 8px;
-      border-radius: 4px;
+      padding: 8px 12px;
+      border-radius: 6px;
       border: 1px solid #111827;
       word-break: break-all;
     }
 
-    /* Code & Schema Blocks */
+    /* Monospace Code Representation */
     .code-block {
       background-color: #06090e;
       border: 1px solid var(--panel-border);
       border-radius: 8px;
-      padding: 15px;
+      padding: 18px;
       font-family: var(--font-mono);
       font-size: 0.8rem;
-      color: #a7f3d0;
+      color: #9ca3af;
       overflow-x: auto;
-      white-space: pre;
+      line-height: 1.5;
     }
 
-    /* Actions / Back Link */
+    /* Back Link */
     .actions {
       display: flex;
       justify-content: center;
@@ -380,7 +364,7 @@
       color: var(--text);
       text-decoration: none;
       font-family: var(--font-mono);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       letter-spacing: 2px;
       text-transform: uppercase;
       padding: 12px 24px;
@@ -397,217 +381,182 @@
       background-color: var(--text);
       color: var(--bg);
       border-color: var(--text);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
     }
   </style>
 </head>
 <body>
   <div class="report-container">
     
-    <!-- Terminal Header -->
+    <!-- Introspective Header -->
     <header class="report-header">
       <div class="header-top">
-        <span class="doc-id">DECOMPRESSION REPORT // CTC-88</span>
-        <span class="status-badge">PUBLIC DISCOVERY RELEASE</span>
+        <span class="doc-id">A Study on Silence // Emotional Topography</span>
+        <span class="status-badge">Qualitative Reflection</span>
       </div>
-      <h1>The Geography of Cognitive Collapse</h1>
+      <h1>The Undertones of Solitude</h1>
       <div class="meta-grid">
-        <div class="meta-item">PROJECT: <strong>WWDITS (Notes of Distress)</strong></div>
-        <div class="meta-item">ANALYZED BY: <strong>TEMPORAL AGENT // DAVID</strong></div>
-        <div class="meta-item">RECORDS COUNT: <strong>735,774 PASSAGES</strong></div>
-        <div class="meta-item">DATE OF DECOMPRESSION: <strong>2026.09.12</strong></div>
+        <div class="meta-item">METAPHOR: <strong>The Self-Portrait of the Mind</strong></div>
+        <div class="meta-item">READINGS: <strong>The Shared Resonance of 735,774 Voices</strong></div>
+        <div class="meta-item">CORE THEME: <strong>The Fragile Geometry of Rebuilding</strong></div>
+        <div class="meta-item">OBSERVATION ARC: <strong>September 2026</strong></div>
       </div>
     </header>
 
-    <!-- Abstract -->
+    <!-- Qualitative Abstract -->
     <section class="abstract-card">
-      <div class="abstract-title">Abstract / Intelligence Overview</div>
+      <div class="abstract-title">An Exploration of the Quiet Spaces</div>
       <div class="abstract-text">
-        This intelligence briefing compiles statistical and semantic profiles extracted from <strong>735,774 anonymized textual entries</strong> totaling <strong>711 megabytes of raw narrative data</strong>. The data charts the raw, uncensored terrain of severe human isolation, crisis, and overthinking. Rather than chaotic noise, mathematical decomposition reveals highly structured thematic attractors (using TF-IDF vectorization and Non-Negative Matrix Factorization). This report publishes the foundational findings, vocabulary clusters, syntactical loops, and the pre-computed schema for immediate downstream cognitive research.
+        This inquiry explores the emotional resonance and unspoken undertones flowing through our collective notes. It is not an exercise in cold, clinical dissection, but a search for the quiet melodies that run beneath 735,774 anonymous reflections. What emerges is a shared topography of vulnerability: the cyclical exhaustion of rebuilding our lives after sudden "arcs" of collapse, the persistent fear of our own fragility, and the beautiful, melancholy realization that our true self is a self-portrait we paint alone—invisible or misread by others, yet deeply true to ourselves. Below, we map these human notes—their qualitative undertones, recurring themes, and linguistic echoes—as a testament to what we do in the shadows.
       </div>
     </section>
 
-    <!-- KPI Metrics -->
+    <!-- KPI Metrics as Emotional Footprints -->
     <section class="kpi-grid">
       <div class="kpi-card">
         <span class="kpi-value">735,774</span>
-        <span class="kpi-label">Total Passages</span>
-      </div>
-      <div class="kpi-card">
-        <span class="kpi-value">0.00%</span>
-        <span class="kpi-label">Empty Narrative Rate</span>
-      </div>
-      <div class="kpi-card">
-        <span class="kpi-value">7.3</span>
-        <span class="kpi-label">Mean Title Word Count</span>
+        <span class="kpi-label">Voices Shared</span>
       </div>
       <div class="kpi-card">
         <span class="kpi-value">181.9</span>
-        <span class="kpi-label">Mean Body Word Count</span>
+        <span class="kpi-label">Average Words Per Confession</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-value">100%</span>
+        <span class="kpi-label">Expressive Intent Rate</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-value">0.00%</span>
+        <span class="kpi-label">Unbroken Silences</span>
       </div>
     </section>
 
-    <!-- Part 1: Dataset Statistics -->
-    <section class="grid-2col">
-      <div class="panel-card">
-        <h2 class="section-title">Quantitative Profiling</h2>
-        <p>
-          A rigorous line-by-line evaluation of the corpus indicates a highly vocal, long-form narrative structure. Every single document contains body text (0.00% empty), pointing to high intent to write.
-        </p>
-        <p>
-          Titles average <strong>36.7 characters</strong> (7.3 words) — representing highly compressed, urgent hooks. Body texts are substantial, averaging <strong>935.9 characters</strong> (181.9 words), with maximum post length exceeding 8,000 words. This signals a strong tendency toward deep, repetitive narrative circularity.
-        </p>
-      </div>
-
-      <div class="panel-card">
-        <h2 class="section-title">Summary Statistics</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Mean</th>
-              <th>Median</th>
-              <th>Std Dev</th>
-              <th>Max</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Title Chars</td>
-              <td>36.69</td>
-              <td>29.0</td>
-              <td>28.83</td>
-              <td>307</td>
-            </tr>
-            <tr>
-              <td>Title Words</td>
-              <td>7.35</td>
-              <td>6.0</td>
-              <td>5.65</td>
-              <td>84</td>
-            </tr>
-            <tr>
-              <td>Body Chars</td>
-              <td>935.91</td>
-              <td>583.0</td>
-              <td>1204.03</td>
-              <td>39,998</td>
-            </tr>
-            <tr>
-              <td>Body Words</td>
-              <td>181.94</td>
-              <td>114.0</td>
-              <td>231.55</td>
-              <td>8,000</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <!-- Core Qualitative Undertones -->
+    <section class="panel-card">
+      <h2 class="section-title">The Anatomy of the Undertones</h2>
+      <p>
+        In reading through the fragments of these personal dialogues, several profound emotional undertones reveal themselves. Rather than random statements, they form a structured psychological architecture:
+      </p>
+      <p>
+        <strong>1. The Cycle of Fragile Rebuilding:</strong> Like a house built in the path of a recurring storm, there is a prominent theme of constructing temporary systems and mental structures, only to watch them get torn down by life's emotional "arcs." There is a fragile belief that each version of the self is "a little more robust, resilient," mixed with a constant, slow-burning fear that the next breakdown will be absolute, leaving nothing to rebuild.
+      </p>
+      <p>
+        <strong>2. The Incommunicable Self-Portrait:</strong> Many notes reveal a quiet, bittersweet acceptance of ultimate isolation. Like a painter whose self-portrait is viewed by everyone but understood by no one, there is the realization that other people will project their own "perspectives," "assumptions," and "realities" onto our lives. True peace is found not in demanding to be perfectly understood, but in holding gently to our own self-portrait, acknowledging that "yours, is only that self portrait. And that's fine."
+      </p>
+      <p>
+        <strong>3. The Friction of External Expectation:</strong> Running heavily beneath the text is the crushing weight of academic, professional, and social standards. The pressure to succeed and the constant feeling of failing these expectations manifest as exhaustion, overthinking, and a deeply felt identity as an "outcast."
+      </p>
     </section>
 
-    <!-- Part 2: Thematic Landscape (Topic Modeling) -->
+    <!-- Archetypal Clusters (Thematic Landscape) -->
     <section>
-      <h2 class="section-title" style="margin-bottom: 20px;">Thematic Landscape (NMF Topic Modeling)</h2>
-      <p style="margin-bottom: 20px; color: #d1d5db;">
-        By applying Non-Negative Matrix Factorization (NMF) to our document-term space, we mapped 8 highly distinct latent thematic dimensions of distress. This represents the stable attractors around which these 735,774 personal narratives gravitate:
+      <h2 class="section-title" style="margin-bottom: 20px;">Emotional Archetypes (Thematic Landscapes)</h2>
+      <p style="margin-bottom: 25px; color: #d1d5db;">
+        Our mathematical model identifies 8 distinct thematic attractors. Far from dry statistical categories, these are the emotional coordinates where the isolated mind seeks refuge or release:
       </p>
       <div class="topics-grid">
         <div class="topic-card">
-          <span class="topic-id">Topic #01 // Interpersonal</span>
+          <span class="topic-id">Archetype I // Relational</span>
           <span class="topic-name">Environmental Friction</span>
-          <span class="topic-words">friends, better, family, since, love, work, school, job, nothing</span>
+          <p class="topic-description">The heavy, daily weight of external life—struggling to anchor ourselves amidst family, school, job, and peer relations.</p>
+          <span class="topic-words">friends, family, school, job, work, love</span>
         </div>
         <div class="topic-card">
-          <span class="topic-id">Topic #02 // Cognitive</span>
+          <span class="topic-id">Archetype II // Cognitive</span>
           <span class="topic-name">Internal Disintegration</span>
-          <span class="topic-words">im, dont, cant, ive, didnt, anymore, wont, doesnt, ill, scared</span>
-        </div>
-        <div class="topic-card severe">
-          <span class="topic-id">Topic #03 // Call to Action</span>
-          <span class="topic-name">Crisis & Intervention</span>
-          <span class="topic-words">please, help, tell, need, anymore, take, stop, suicidal, suicide</span>
+          <p class="topic-description">The stuttering internal monologue of doubt, where grammatical structures break down into raw, fearful negation.</p>
+          <span class="topic-words">im, dont, cant, ive, didnt, anymore, scared</span>
         </div>
         <div class="topic-card">
-          <span class="topic-id">Topic #04 // Cathartic</span>
+          <span class="topic-id">Archetype III // Interpersonal</span>
+          <span class="topic-name">The Outstretched Hand</span>
+          <p class="topic-description">The moment the boundary of solitary overthinking is crossed, transforming into an urgent, direct call for connection.</p>
+          <span class="topic-words">please, help, need, stop, tell, suicidal</span>
+        </div>
+        <div class="topic-card">
+          <span class="topic-id">Archetype IV // Cathartic</span>
           <span class="topic-name">Anger & Resentment</span>
-          <span class="topic-words">fucking, hate, fuck, shit, world, every, wish, done, stupid, fucked</span>
+          <p class="topic-description">The explosive, screaming relief of raw frustration directed at an unyielding and cold universe.</p>
+          <span class="topic-words">fucking, hate, fuck, shit, world, done, fucked</span>
         </div>
         <div class="topic-card">
-          <span class="topic-id">Topic #05 // Fatigue</span>
+          <span class="topic-id">Archetype V // Physical</span>
           <span class="topic-name">Existential Exhaustion</span>
-          <span class="topic-words">tired, anymore, keep, trying, sleep, better, end, done, living</span>
-        </div>
-        <div class="topic-card severe">
-          <span class="topic-id">Topic #06 // Existential</span>
-          <span class="topic-name">Suffering & Mortality</span>
-          <span class="topic-words">die, wanna, live, anymore, wish, pain, death, stop, deserve, care</span>
-        </div>
-        <div class="topic-card severe">
-          <span class="topic-id">Topic #07 // Crisis Timing</span>
-          <span class="topic-name">Urgency & Panic</span>
-          <span class="topic-words">kill, gonna, tonight, scared, suicide, soon, might, today, wish</span>
+          <p class="topic-description">A profound, systemic weariness where the simple act of trying and the desire for sleep collapse into burnout.</p>
+          <span class="topic-words">tired, anymore, keep, trying, sleep, end, living</span>
         </div>
         <div class="topic-card">
-          <span class="topic-id">Topic #08 // Connectedness</span>
-          <span class="topic-name">Isolation & Connection</span>
-          <span class="topic-words">talk, need, alone, help, friend, right, vent, friends, wanna</span>
+          <span class="topic-id">Archetype VI // Existential</span>
+          <span class="topic-name">Suffering & Mortality</span>
+          <p class="topic-description">The quiet call of the void—where the sheer friction of existing outweighs the immediate instinct to survive.</p>
+          <span class="topic-words">die, wanna, live, pain, death, stop, care</span>
+        </div>
+        <div class="topic-card">
+          <span class="topic-id">Archetype VII // Crisis</span>
+          <span class="topic-name">Precipice of Urgency</span>
+          <span class="topic-words">kill, gonna, tonight, scared, suicide, soon, today</span>
+          <p class="topic-description">The acute, terrifying threshold of immediate physical crisis where time and options run desperately thin.</p>
+        </div>
+        <div class="topic-card">
+          <span class="topic-id">Archetype VIII // Connectedness</span>
+          <span class="topic-name">Longing for Echoes</span>
+          <p class="topic-description">The beautiful, lingering desire to find another human being who can read our self-portrait and break our isolation.</p>
         </div>
       </div>
     </section>
 
-    <!-- Part 3: Vocabulary Visualizations (Word Clouds) -->
+    <!-- Visualizing Vocabulary (Word Clouds) -->
     <section>
-      <h2 class="section-title" style="margin-bottom: 20px;">The Vocabulary of Solitude</h2>
+      <h2 class="section-title" style="margin-bottom: 20px;">Linguistic Footprints of Solitude</h2>
       <div class="grid-2col">
         <div class="wordcloud-wrapper">
           <img src="wordcloud_title.png" alt="Title Word Cloud" />
-          <div class="wordcloud-caption">Title Vocabulary Frequencies (Top words: help, suicide, need, can't, kill, die)</div>
+          <div class="wordcloud-caption">Title Callouts (Linguistic hooks: help, suicide, need, can't, kill, die)</div>
         </div>
         <div class="wordcloud-wrapper">
           <img src="wordcloud_selftext.png" alt="Selftext Word Cloud" />
-          <div class="wordcloud-caption">Selftext Narrative Frequencies (Top words: can't, friends, help, school, family, job)</div>
+          <div class="wordcloud-caption">Narrative Inner Spaces (Descriptive landscape: can't, friends, help, school, family)</div>
         </div>
       </div>
       <p style="margin-top: 20px; color: #d1d5db; text-align: justify;">
-        Visualizing term frequencies reveals a clear linguistic boundary between <strong>Titles</strong> and <strong>Selftexts</strong>. Titles are compressed cries: heavily populated by action verbs and acute crisis terms like <em>"help"</em>, <em>"suicide"</em>, <em>"kill"</em>, and <em>"die"</em>. Conversely, the inner selftexts contain highly descriptive, relational words: detailing social units and external constraints (<em>"friends"</em>, <em>"school"</em>, <em>"family"</em>, <em>"job"</em>, <em>"work"</em>). This suggests that while the internal crisis (the "body") is deeply embedded in social and vocational friction, the announcement (the "title") is condensed into raw, immediate physical danger.
+        Visualizing term frequencies reveals a clear linguistic boundary between the <strong>Title</strong> and the <strong>Body</strong> of our notes. The Titles are compressed, sudden cries: heavily populated by action verbs and acute crisis terms like <em>"help"</em>, <em>"need"</em>, <em>"suicide"</em>, and <em>"die"</em>. Conversely, the inner selftexts contain highly descriptive, relational words: detailing social environments and friction points (<em>"friends"</em>, <em>"school"</em>, <em>"family"</em>, <em>"job"</em>, <em>"work"</em>). This suggests that while the internal crisis is deeply social and environmental, the outward call is condensed into a raw, immediate physical statement.
       </p>
     </section>
 
-    <!-- Part 4: Phrase loops (N-Grams) -->
+    <!-- Monologue Loops (N-Grams) -->
     <section class="grid-2col">
       <div class="panel-card">
-        <h2 class="section-title">Title Syntax Patterns</h2>
-        <p>Analyzing word pairs (Bigrams) and triples (Trigrams) in titles highlights recurring callouts:</p>
+        <h2 class="section-title">Syntactical Loops (Title)</h2>
+        <p>In brief title statements, the mind gets caught in highly repetitious, direct loops:</p>
         <table>
           <thead>
             <tr>
-              <th>Phrase Sequence</th>
-              <th>Count</th>
+              <th>Syntactical Loop</th>
+              <th>Encounter Frequency</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>need help</strong> (Bigram)</td>
+              <td><strong>need help</strong></td>
               <td>2,598</td>
             </tr>
             <tr>
-              <td><strong>please help</strong> (Bigram)</td>
+              <td><strong>please help</strong></td>
               <td>1,688</td>
             </tr>
             <tr>
-              <td><strong>need talk</strong> (Bigram)</td>
+              <td><strong>need talk</strong></td>
               <td>1,287</td>
             </tr>
             <tr>
-              <td><strong>suicidal thoughts</strong> (Bigram)</td>
+              <td><strong>suicidal thoughts</strong></td>
               <td>1,170</td>
             </tr>
             <tr>
-              <td><strong>can't take anymore</strong> (Trigram)</td>
+              <td><strong>can't take anymore</strong></td>
               <td>383</td>
             </tr>
             <tr>
-              <td><strong>can't stop thinking</strong> (Trigram)</td>
+              <td><strong>can't stop thinking</strong></td>
               <td>201</td>
             </tr>
           </tbody>
@@ -615,38 +564,38 @@
       </div>
 
       <div class="panel-card">
-        <h2 class="section-title">Selftext Narrative Loops</h2>
-        <p>In body text, the structural loops map out the direct environment and systemic distress:</p>
+        <h2 class="section-title">Narrative Circularity (Body)</h2>
+        <p>In longer reflections, the monologue loops back to structural triggers and social limits:</p>
         <table>
           <thead>
             <tr>
-              <th>Phrase Sequence</th>
-              <th>Count</th>
+              <th>Narrative Loop</th>
+              <th>Encounter Frequency</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>high school</strong> (Bigram)</td>
+              <td><strong>high school</strong></td>
               <td>12,693</td>
             </tr>
             <tr>
-              <td><strong>best friend</strong> (Bigram)</td>
+              <td><strong>best friend</strong></td>
               <td>8,153</td>
             </tr>
             <tr>
-              <td><strong>suicidal thoughts</strong> (Bigram)</td>
+              <td><strong>suicidal thoughts</strong></td>
               <td>8,265</td>
             </tr>
             <tr>
-              <td><strong>friends family</strong> (Bigram)</td>
+              <td><strong>friends family</strong></td>
               <td>5,270</td>
             </tr>
             <tr>
-              <td><strong>long story short</strong> (Trigram)</td>
+              <td><strong>long story short</strong></td>
               <td>1,473</td>
             </tr>
             <tr>
-              <td><strong>matter hard try</strong> (Trigram)</td>
+              <td><strong>matter hard try</strong></td>
               <td>992</td>
             </tr>
           </tbody>
@@ -658,10 +607,10 @@
     <section class="panel-card">
       <h2 class="section-title" style="margin-bottom: 15px;">The Compressed Blueprint</h2>
       <p>
-        To facilitate rapid development and high-frequency analytical loading without parsing the massive 711 MB raw JSONL database, we constructed a compressed tabular layout: <strong><code>derived_data.csv</code></strong> (179 MB). 
+        To help navigate this massive sea of 735,774 personal dialogues, we have pre-computed a lightweight, structured index: <strong><code>derived_data.csv</code></strong> (179 MB).
       </p>
       <p style="margin-bottom: 15px;">
-        This tabular format enriches each post record with character counts, word counts, and a normalized <strong>heuristic sentiment score</strong> (calculating normalized relative densities of positive and negative valence lexicons):
+        This common format bypasses the complex 711 MB raw JSONL database, providing clean, pre-tokenized fields and a normalized <strong>heuristic sentiment score</strong> (evaluating relative densities of positive and negative valence terms) for fast analysis:
       </p>
       <div class="code-block">
 derived_data.csv (Schema Layout):
@@ -682,7 +631,7 @@ selftext_clean_short: Cleaned lowercased preview (first 200 characters) of the b
     <!-- Footer Back Nav -->
     <footer class="actions">
       <a href="index.html" class="back-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"></line>
           <polyline points="12 19 5 12 12 5"></polyline>
         </svg>
