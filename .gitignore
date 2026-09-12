@@ -1,2 +1,23 @@
 *.jsonl
 .env
+__pycache__/
+*.pyc
+
+# Analysis tools and temporary reports
+analysis.md
+analysis_utils.py
+analyse_stats.py
+stats_report.md
+analyse_wordcloud.py
+vocab_title_frequencies.csv
+vocab_selftext_frequencies.csv
+analyse_ngrams.py
+ngrams_title_bigrams.csv
+ngrams_title_trigrams.csv
+ngrams_selftext_bigrams.csv
+ngrams_selftext_trigrams.csv
+analyse_topics.py
+topics_report.md
+analyse_derive_format.py
+derived_data.csv
+test_analysis.py
