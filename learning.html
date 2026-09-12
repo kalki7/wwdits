@@ -50,65 +50,21 @@
     .report-header {
       border: 1px solid var(--panel-border);
       background-color: var(--panel);
-      padding: 30px;
+      padding: 40px;
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-    }
-
-    .header-top {
-      display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .doc-id {
-      font-family: var(--font-mono);
-      color: var(--muted);
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-size: 0.8rem;
-    }
-
-    .status-badge {
-      font-family: var(--font-sans);
-      background-color: var(--amber-glow);
-      border: 1px solid var(--amber-accent);
-      color: var(--amber-accent);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
+      text-align: center;
     }
 
     h1 {
-      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      font-size: clamp(2rem, 6vw, 3rem);
       font-weight: 300;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
       line-height: 1.2;
       text-transform: capitalize;
-      margin: 5px 0;
-    }
-
-    .meta-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      border-top: 1px solid var(--panel-border);
-      padding-top: 18px;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .meta-item strong {
-      color: var(--text);
     }
 
     /* Abstract / Introspective Overview */
@@ -134,40 +90,6 @@
       font-size: 1.05rem;
       line-height: 1.8;
       text-align: justify;
-    }
-
-    /* KPI Grid representing footprints of human emotion */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
-
-    .kpi-card {
-      background-color: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    }
-
-    .kpi-value {
-      font-family: var(--font-mono);
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--text);
-      margin-bottom: 5px;
-    }
-
-    .kpi-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      color: var(--muted);
-      letter-spacing: 1px;
     }
 
     /* Sections */
@@ -339,19 +261,6 @@
       word-break: break-all;
     }
 
-    /* Monospace Code Representation */
-    .code-block {
-      background-color: #06090e;
-      border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 18px;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: #9ca3af;
-      overflow-x: auto;
-      line-height: 1.5;
-    }
-
     /* Back Link */
     .actions {
       display: flex;
@@ -389,44 +298,14 @@
     
     <!-- Introspective Header -->
     <header class="report-header">
-      <div class="header-top">
-        <span class="doc-id">A Study on Silence // Emotional Topography</span>
-        <span class="status-badge">Qualitative Reflection</span>
-      </div>
       <h1>The Undertones of Solitude</h1>
-      <div class="meta-grid">
-        <div class="meta-item">METAPHOR: <strong>The Self-Portrait of the Mind</strong></div>
-        <div class="meta-item">READINGS: <strong>The Shared Resonance of 735,774 Voices</strong></div>
-        <div class="meta-item">CORE THEME: <strong>The Fragile Geometry of Rebuilding</strong></div>
-        <div class="meta-item">OBSERVATION ARC: <strong>September 2026</strong></div>
-      </div>
     </header>
 
     <!-- Qualitative Abstract -->
     <section class="abstract-card">
       <div class="abstract-title">An Exploration of the Quiet Spaces</div>
       <div class="abstract-text">
-        This inquiry explores the emotional resonance and unspoken undertones flowing through our collective notes. It is not an exercise in cold, clinical dissection, but a search for the quiet melodies that run beneath 735,774 anonymous reflections. What emerges is a shared topography of vulnerability: the cyclical exhaustion of rebuilding our lives after sudden "arcs" of collapse, the persistent fear of our own fragility, and the beautiful, melancholy realization that our true self is a self-portrait we paint alone—invisible or misread by others, yet deeply true to ourselves. Below, we map these human notes—their qualitative undertones, recurring themes, and linguistic echoes—as a testament to what we do in the shadows.
-      </div>
-    </section>
-
-    <!-- KPI Metrics as Emotional Footprints -->
-    <section class="kpi-grid">
-      <div class="kpi-card">
-        <span class="kpi-value">735,774</span>
-        <span class="kpi-label">Voices Shared</span>
-      </div>
-      <div class="kpi-card">
-        <span class="kpi-value">181.9</span>
-        <span class="kpi-label">Average Words Per Confession</span>
-      </div>
-      <div class="kpi-card">
-        <span class="kpi-value">100%</span>
-        <span class="kpi-label">Expressive Intent Rate</span>
-      </div>
-      <div class="kpi-card">
-        <span class="kpi-value">0.00%</span>
-        <span class="kpi-label">Unbroken Silences</span>
+        This inquiry explores the emotional resonance and unspoken undertones flowing through our collective notes. It is not an exercise in cold, clinical dissection, but a search for the quiet melodies that run beneath our anonymous reflections. What emerges is a shared topography of vulnerability: the cyclical exhaustion of rebuilding our lives after sudden "arcs" of collapse, the persistent fear of our own fragility, and the beautiful, melancholy realization that our true self is a self-portrait we paint alone—invisible or misread by others, yet deeply true to ourselves. Below, we map these human notes—their qualitative undertones, recurring themes, and linguistic echoes—as a testament to what we do in the shadows.
       </div>
     </section>
 
@@ -499,6 +378,7 @@
         <div class="topic-card">
           <span class="topic-id">Archetype VIII // Connectedness</span>
           <span class="topic-name">Longing for Echoes</span>
+          <span class="topic-words">talk, need, alone, help, friend, right, vent, wanna</span>
           <p class="topic-description">The beautiful, lingering desire to find another human being who can read our self-portrait and break our isolation.</p>
         </div>
       </div>
@@ -600,31 +480,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-    </section>
-
-    <!-- Part 5: Derived Format & Code -->
-    <section class="panel-card">
-      <h2 class="section-title" style="margin-bottom: 15px;">The Compressed Blueprint</h2>
-      <p>
-        To help navigate this massive sea of 735,774 personal dialogues, we have pre-computed a lightweight, structured index: <strong><code>derived_data.csv</code></strong> (179 MB).
-      </p>
-      <p style="margin-bottom: 15px;">
-        This common format bypasses the complex 711 MB raw JSONL database, providing clean, pre-tokenized fields and a normalized <strong>heuristic sentiment score</strong> (evaluating relative densities of positive and negative valence terms) for fast analysis:
-      </p>
-      <div class="code-block">
-derived_data.csv (Schema Layout):
----------------------------------------------------------------------------------------
-id:                   Sequence Index (e.g., POST-000001, POST-000002)
-title_length_char:    Raw length of title in characters
-title_length_word:    Raw word count of title
-selftext_length_char: Raw length of body in characters
-selftext_length_word: Raw word count of body
-has_selftext:         Boolean flag (1 = non-empty body text, 0 = empty)
-sentiment_score:      Heuristic sentiment score [-1.0000 to +1.0000]
-title_clean:          Normalized lowercased title without punctuation
-selftext_clean_short: Cleaned lowercased preview (first 200 characters) of the body text
----------------------------------------------------------------------------------------
       </div>
     </section>
 
