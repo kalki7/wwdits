@@ -9,8 +9,8 @@
     HOW TO CONNECT THIS FORM PRIVATELY TO YOUR GOOGLE SHEET (2 MINUTES)
     ========================================================================
     Because this site is hosted statically on GitHub Pages, the safest way to
-    collect responses so ONLY YOU can see them is a write-only Google Apps Script
-    attached to a private Google Sheet in your own Google Drive:
+    collect responses so ONLY YOU can see them is an Apps Script attached to a
+    private Google Sheet in your own Google Drive:
 
     1. Create a new Google Sheet (keep it Private to your account).
     2. In Row 1, add these headers in columns A through F:
@@ -33,10 +33,32 @@
            .setMimeType(ContentService.MimeType.JSON);
        }
 
+       function doGet() {
+         var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+         var data = sheet.getDataRange().getValues();
+         var reserved = [];
+         
+         // Start from row 2 (index 1) to skip header row
+         for (var i = 1; i < data.length; i++) {
+           var dateChoice = data[i][3]; // Column D
+           var potluckDish = data[i][4]; // Column E
+           if (dateChoice && potluckDish) {
+             reserved.push({
+               dateChoice: dateChoice,
+               potluckDish: potluckDish
+             });
+           }
+         }
+         
+         return ContentService
+           .createTextOutput(JSON.stringify(reserved))
+           .setMimeType(ContentService.MimeType.JSON);
+       }
+
     4. Click "Deploy" -> "New deployment":
        - Select type: "Web app"
        - Execute as: "Me" (your Google account)
-       - Who has access: "Anyone" (this ONLY allows POSTing to doPost; nobody can view your Sheet, and there is no doGet function so visiting the URL returns nothing!)
+       - Who has access: "Anyone" (this allows reading only the public-facing date choices and potluck dishes to avoid duplicates, while keeping names and phone numbers safely hidden in your private Google Sheet!)
     5. Copy the generated Web App URL and paste it into GOOGLE_SCRIPT_URL below.
     ========================================================================
   -->
@@ -471,20 +493,78 @@
       box-shadow: 3px 3px 0px #5e5668;
     }
 
-    /* Privacy Notice */
-    .privacy-note {
-      display: flex;
+    /* Reserved Dishes Card */
+    .reserved-dishes-box {
+      background: #ffffff;
+      border: var(--border-thick);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: var(--shadow-hard);
+      position: relative;
+    }
+
+    .reserved-title {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
-      font-size: 0.85rem;
+      background: var(--lime-green);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 2px solid var(--ink);
+      font-size: 0.95rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .reserved-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .reserved-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: #fdf6e4;
+      border: 2px solid var(--ink);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.95rem;
       font-weight: 700;
-      color: #463d52;
+    }
+
+    .reserved-item .dish-name {
+      color: var(--ink);
+      font-size: 1rem;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .reserved-item .dish-date {
+      font-size: 0.8rem;
+      color: #554865;
+      background: var(--bg-yellow);
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      padding: 1px 8px;
+      display: inline-block;
+      align-self: flex-start;
+      margin-top: 4px;
+    }
+
+    .reserved-loading, .reserved-error, .reserved-empty {
+      font-weight: 700;
+      color: #554865;
       text-align: center;
-      background: #f5efe0;
+      padding: 12px;
+      background: #fdf6e4;
       border: 2px dashed var(--ink);
       border-radius: 10px;
-      padding: 10px 14px;
     }
 
     /* Feedback / Confirmation Screen */
@@ -563,6 +643,23 @@
             <strong>The Printed 500-Word Keren Thesis:</strong> Condition to attend: you must write a <strong>minimum 500-word essay on Keren</strong>, print it out on actual physical paper, and hand-deliver it to Keren at the party.
           </div>
         </li>
+      </ul>
+    </section>
+
+    <!-- Reserved Potluck Dishes Section -->
+    <section class="reserved-dishes-box" aria-label="Reserved Dishes">
+      <div class="reserved-title">🍽️ What Others Are Bringing (No Duplicates!)</div>
+      <div class="reserved-loading" id="reserved-loading">
+        ⏳ Consulting the sacred potluck archives...
+      </div>
+      <div class="reserved-error" id="reserved-error" style="display: none;">
+        ⚠️ Configure <code>doGet</code> in your Apps Script (see setup instructions at top) to show reserved dishes here!
+      </div>
+      <div class="reserved-empty" id="reserved-empty" style="display: none;">
+        ✨ No dishes reserved yet! Be the first to claim your tribute!
+      </div>
+      <ul class="reserved-list" id="reserved-list" style="display: none;">
+        <!-- Dynamically populated -->
       </ul>
     </section>
 
@@ -675,10 +772,6 @@
         </label>
       </div>
 
-      <div class="privacy-note">
-        🔒 <strong>Private Submission:</strong> Your RSVP, phone number, and potluck dish are transmitted directly to the host's private vault and are never displayed publicly.
-      </div>
-
       <button type="submit" id="submit-btn" class="submit-btn">
         🎉 Lock In My Birthday Bash RSVP!
       </button>
@@ -706,6 +799,67 @@
         pledgeLabel.classList.remove("checked");
       }
     });
+
+    // Fetch and display reserved dishes
+    async function loadReservedDishes() {
+      const loadingEl = document.getElementById("reserved-loading");
+      const errorEl = document.getElementById("reserved-error");
+      const emptyEl = document.getElementById("reserved-empty");
+      const listEl = document.getElementById("reserved-list");
+
+      if (GOOGLE_SCRIPT_URL.includes("REPLACE_WITH_YOUR_DEPLOYMENT_ID")) {
+        loadingEl.style.display = "none";
+        errorEl.style.display = "block";
+        return;
+      }
+
+      try {
+        loadingEl.style.display = "block";
+        errorEl.style.display = "none";
+        emptyEl.style.display = "none";
+        listEl.style.display = "none";
+
+        const res = await fetch(GOOGLE_SCRIPT_URL);
+        const data = await res.json();
+
+        loadingEl.style.display = "none";
+
+        if (Array.isArray(data)) {
+          if (data.length === 0) {
+            emptyEl.style.display = "block";
+          } else {
+            listEl.innerHTML = "";
+            data.forEach(item => {
+              const li = document.createElement("li");
+              li.className = "reserved-item";
+              
+              const dishSpan = document.createElement("span");
+              dishSpan.className = "dish-name";
+              dishSpan.textContent = item.potluckDish || "Secret Dish";
+              
+              const dateSpan = document.createElement("span");
+              dateSpan.className = "dish-date";
+              dateSpan.textContent = item.dateChoice || "Anytime";
+              
+              li.appendChild(dishSpan);
+              li.appendChild(dateSpan);
+              listEl.appendChild(li);
+            });
+            listEl.style.display = "grid";
+          }
+        } else {
+          // If response is not an array (e.g. HTML error from missing doGet)
+          errorEl.style.display = "block";
+        }
+      } catch (err) {
+        loadingEl.style.display = "none";
+        errorEl.style.display = "block";
+        console.error("Failed to load reserved dishes:", err);
+      }
+    }
+
+    // Load dishes on startup
+    document.addEventListener("DOMContentLoaded", loadReservedDishes);
 
     // Confetti Burst on Submission
     function launchConfetti() {
@@ -817,6 +971,9 @@
         statusBanner.innerHTML =
           "🎂 <strong>YOU'RE IN!</strong> Your RSVP, potluck dish, and solemn oath to bring a printed 500-word essay on Keren have been locked in. Better warm up your printer!";
         statusBanner.style.display = "block";
+
+        // Refresh the list of reserved dishes
+        loadReservedDishes();
       } catch (err) {
         submitBtn.disabled = false;
         submitBtn.textContent = "🎉 Lock In My Birthday Bash RSVP!";
