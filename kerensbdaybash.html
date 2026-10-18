@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KEREN'S BDAY BASH // OFFICIAL ENTRY TRIBUTE & POTLUCK FORM</title>
+  <!--
+    ========================================================================
+    HOW TO CONNECT THIS FORM PRIVATELY TO YOUR GOOGLE SHEET (2 MINUTES)
+    ========================================================================
+    Because this site is hosted statically on GitHub Pages, the safest way to
+    collect responses so ONLY YOU can see them is a write-only Google Apps Script
+    attached to a private Google Sheet in your own Google Drive:
+
+    1. Create a new Google Sheet (keep it Private to your account).
+    2. In Row 1, add these headers in columns A through F:
+       Timestamp | Name | Phone | Date Choice | Potluck Dish | Printed 500-Word Essay Promise
+    3. Click Extensions -> Apps Script, and paste this exact script:
+
+       function doPost(e) {
+         var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+         var data = JSON.parse(e.postData.contents);
+         sheet.appendRow([
+           new Date().toISOString(),
+           data.name || "",
+           data.phone || "",
+           data.dateChoice || "",
+           data.potluckDish || "",
+           data.essayPromise || ""
+         ]);
+         return ContentService
+           .createTextOutput(JSON.stringify({ status: "ok" }))
+           .setMimeType(ContentService.MimeType.JSON);
+       }
+
+    4. Click "Deploy" -> "New deployment":
+       - Select type: "Web app"
+       - Execute as: "Me" (your Google account)
+       - Who has access: "Anyone" (this ONLY allows POSTing to doPost; nobody can view your Sheet, and there is no doGet function so visiting the URL returns nothing!)
+    5. Copy the generated Web App URL and paste it into GOOGLE_SCRIPT_URL below.
+    ========================================================================
+  -->
+  <style>
+    :root {
+      --bg-cream: #fff8ec;
+      --bg-yellow: #ffe66d;
+      --hot-pink: #ff2a85;
+      --tangerine: #ff6b35;
+      --electric-purple: #6c2bd9;
+      --lime-green: #00c46a;
+      --ink: #1a1423;
+      --card-bg: #ffffff;
+      --shadow-hard: 6px 6px 0px #1a1423;
+      --shadow-sm: 4px 4px 0px #1a1423;
+      --border-thick: 3px solid #1a1423;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      background-image:
+        radial-gradient(var(--tangerine) 1.5px, transparent 1.5px),
+        radial-gradient(var(--hot-pink) 1.5px, var(--bg-cream) 1.5px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      color: var(--ink);
+      font-family: 'Trebuchet MS', 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif;
+      line-height: 1.5;
+      padding: 20px 16px 80px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Marquee Ticker at Top */
+    .marquee-wrap {
+      background: var(--ink);
+      color: var(--bg-yellow);
+      border: var(--border-thick);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 8px 0;
+      margin: 0 auto 28px;
+      max-width: 860px;
+      border-radius: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 900;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .marquee-track {
+      display: inline-block;
+      animation: marquee 22s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .page-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Hero Banner */
+    .hero-card {
+      background: linear-gradient(135deg, #ffe66d 0%, #ffb703 55%, #ff85a1 100%);
+      border: var(--border-thick);
+      border-radius: 20px;
+      padding: 36px 28px;
+      box-shadow: var(--shadow-hard);
+      text-align: center;
+      position: relative;
+      transform: rotate(-0.6deg);
+    }
+
+    .sticker-badge {
+      display: inline-block;
+      background: var(--hot-pink);
+      color: #fff;
+      font-weight: 900;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border: var(--border-thick);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      box-shadow: 3px 3px 0 var(--ink);
+      transform: rotate(-3deg);
+      margin-bottom: 14px;
+    }
+
+    .sticker-corner {
+      position: absolute;
+      top: -16px;
+      right: 18px;
+      background: #00f5d4;
+      color: var(--ink);
+      font-weight: 900;
+      font-size: 0.8rem;
+      padding: 8px 14px;
+      border: var(--border-thick);
+      border-radius: 12px;
+      box-shadow: 3px 3px 0 var(--ink);
+      transform: rotate(8deg);
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 6vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--ink);
+      text-shadow: 3px 3px 0px #ffffff;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-sub {
+      font-size: 1.12rem;
+      font-weight: 700;
+      max-width: 620px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px dashed var(--ink);
+      padding: 12px 18px;
+      border-radius: 12px;
+    }
+
+    /* Rules / Conditions Banner */
+    .rules-box {
+      background: #fff;
+      border: var(--border-thick);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: var(--shadow-hard);
+      position: relative;
+    }
+
+    .rules-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--electric-purple);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 2px solid var(--ink);
+      font-size: 0.95rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .rules-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .rules-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      background: #fdf6e4;
+      border: 2px solid var(--ink);
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+
+    .rules-list li span.icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: var(--card-bg);
+      border: var(--border-thick);
+      border-radius: 20px;
+      padding: 32px 26px;
+      box-shadow: var(--shadow-hard);
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-label {
+      font-size: 1.15rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-pill {
+      background: var(--bg-yellow);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .field-hint {
+      font-size: 0.92rem;
+      color: #4a3f55;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="tel"] {
+      width: 100%;
+      border: var(--border-thick);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 1.02rem;
+      font-family: inherit;
+      font-weight: 600;
+      background: #fffdf9;
+      color: var(--ink);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="tel"]:focus {
+      outline: none;
+      background: #ffffff;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--hot-pink);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Date Selection Cards */
+    .date-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 640px) {
+      .date-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .date-option-label {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .date-option-label input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .date-tile {
+      border: var(--border-thick);
+      border-radius: 14px;
+      padding: 16px 14px;
+      background: #fffdf7;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+    }
+
+    .date-tile .emoji {
+      font-size: 1.8rem;
+    }
+
+    .date-tile .date-main {
+      font-weight: 900;
+      font-size: 1.05rem;
+    }
+
+    .date-tile .date-sub {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #554865;
+    }
+
+    .date-option-label input[type="radio"]:checked + .date-tile {
+      background: var(--bg-yellow);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--ink);
+    }
+
+    .date-option-label:hover .date-tile {
+      background: #fff3b0;
+    }
+
+    /* Solemn Essay Pledge Box */
+    .pledge-box {
+      background: #fff6f9;
+      border: var(--border-thick);
+      border-radius: 16px;
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .pledge-check-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+      background: #ffffff;
+      border: var(--border-thick);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .pledge-check-label:hover {
+      background: #fffdf0;
+      transform: translate(-1px, -1px);
+    }
+
+    .pledge-check-label input[type="checkbox"] {
+      width: 28px;
+      height: 28px;
+      margin-top: 2px;
+      accent-color: var(--hot-pink);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .pledge-check-label.checked {
+      background: #d8f3dc;
+      border-color: var(--ink);
+      box-shadow: 6px 6px 0px var(--ink);
+    }
+
+    .pledge-text {
+      font-size: 1.03rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .pledge-text strong {
+      color: var(--hot-pink);
+      text-decoration: underline;
+    }
+
+    .pledge-sub {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #554865;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 18px 24px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #fff;
+      background: var(--hot-pink);
+      border: var(--border-thick);
+      border-radius: 14px;
+      box-shadow: var(--shadow-hard);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: #ff0a73;
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0px var(--ink);
+    }
+
+    .submit-btn:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--ink);
+    }
+
+    .submit-btn:disabled {
+      background: #b8b2c2;
+      color: #f4f1f8;
+      cursor: not-allowed;
+      box-shadow: 3px 3px 0px #5e5668;
+    }
+
+    /* Privacy Notice */
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #463d52;
+      text-align: center;
+      background: #f5efe0;
+      border: 2px dashed var(--ink);
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+
+    /* Feedback / Confirmation Screen */
+    .status-banner {
+      display: none;
+      border: var(--border-thick);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      font-weight: 800;
+      box-shadow: var(--shadow-hard);
+    }
+
+    .status-banner.success {
+      display: block;
+      background: #d8f3dc;
+      color: var(--ink);
+    }
+
+    .status-banner.error {
+      display: block;
+      background: #ffccd5;
+      color: var(--ink);
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      🎂 ALERT: KEREN'S BIRTHDAY BASH APPLICATION PORTAL IS LIVE • PRINTED 500-WORD ESSAY AT THE DOOR = MANDATORY • BRING A POTLUCK DISH THAT REMINDS YOU OF KEREN • NOVEMBER 21ST NOON OR NOVEMBER 28TH NOON (OR BOTH!) • 🎂 ALERT: KEREN'S BIRTHDAY BASH APPLICATION PORTAL IS LIVE • PRINTED 500-WORD ESSAY AT THE DOOR = MANDATORY • BRING A POTLUCK DISH THAT REMINDS YOU OF KEREN • NOVEMBER 21ST NOON OR NOVEMBER 28TH NOON (OR BOTH!) •
+    </div>
+  </div>
+
+  <div class="page-wrapper">
+    <!-- Hero Header -->
+    <header class="hero-card">
+      <div class="sticker-corner">100% MANDATORY</div>
+      <div class="sticker-badge">Official Party Clearance Form</div>
+      <h1>KEREN'S BIRTHDAY BASH! 🎉</h1>
+      <p class="hero-sub">
+        Think you can just waltz in and eat cake for free?! Think again. Complete the sacred entry requirements below to secure your spot at the celebration of the century.
+      </p>
+    </header>
+
+    <!-- Non-Negotiable Terms & Conditions -->
+    <section class="rules-box" aria-label="Party Rules">
+      <div class="rules-title">📜 Non-Negotiable Party Conditions</div>
+      <ul class="rules-list">
+        <li>
+          <span class="icon">🗓️</span>
+          <div>
+            <strong>When is it happening?</strong> Pick your preferred slot: <strong>Nov 21st (12:00 PM Noon)</strong>, <strong>Nov 28th (12:00 PM Noon)</strong>, or flex your loyalty and pick <strong>BOTH</strong>.
+          </div>
+        </li>
+        <li>
+          <span class="icon">🍲</span>
+          <div>
+            <strong>Potluck Tribute:</strong> This is a potluck! You must bring a dish of your choice that <em>specifically reminds you of Keren</em> (chaotic, sweet, spicy, comfortingly unhinged—explain yourself).
+          </div>
+        </li>
+        <li>
+          <span class="icon">🖨️</span>
+          <div>
+            <strong>The Printed 500-Word Keren Thesis:</strong> Condition to attend: you must write a <strong>minimum 500-word essay on Keren</strong>, print it out on actual physical paper, and hand-deliver it to Keren at the party.
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Main Form -->
+    <form id="bday-form" class="form-card" novalidate>
+      <!-- Step 1 & 2: Name + Phone -->
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label" for="guest-name">
+            <span class="step-pill">01</span> Your Full Name *
+          </label>
+          <span class="field-hint">So we know who to let through the door (or roast).</span>
+          <input
+            type="text"
+            id="guest-name"
+            name="name"
+            placeholder="e.g., Certified Keren Fan #1"
+            required
+            autocomplete="name"
+          />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="guest-phone">
+            <span class="step-pill">02</span> Phone Number *
+          </label>
+          <span class="field-hint">For top-secret party coordinates &amp; updates.</span>
+          <input
+            type="tel"
+            id="guest-phone"
+            name="phone"
+            placeholder="e.g., +91 98765 43210"
+            required
+            autocomplete="tel"
+          />
+        </div>
+      </div>
+
+      <!-- Step 3: Date of Choice -->
+      <div class="field-group">
+        <label class="field-label">
+          <span class="step-pill">03</span> Date of Choice (November) *
+        </label>
+        <span class="field-hint">Which noon showdown works for you?</span>
+
+        <div class="date-options" role="radiogroup" aria-label="Date of choice">
+          <label class="date-option-label">
+            <input type="radio" name="dateChoice" value="Nov 21st Noon" required />
+            <div class="date-tile">
+              <span class="emoji">🌞</span>
+              <span class="date-main">Nov 21st • Noon</span>
+              <span class="date-sub">Saturday, 12:00 PM</span>
+            </div>
+          </label>
+
+          <label class="date-option-label">
+            <input type="radio" name="dateChoice" value="Nov 28th Noon" />
+            <div class="date-tile">
+              <span class="emoji">🪩</span>
+              <span class="date-main">Nov 28th • Noon</span>
+              <span class="date-sub">Saturday, 12:00 PM</span>
+            </div>
+          </label>
+
+          <label class="date-option-label">
+            <input type="radio" name="dateChoice" value="Both (Nov 21st & Nov 28th Noon)" />
+            <div class="date-tile">
+              <span class="emoji">🔥</span>
+              <span class="date-main">BOTH DATES!</span>
+              <span class="date-sub">21st Noon &amp; 28th Noon</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Step 4: Potluck Dish -->
+      <div class="field-group">
+        <label class="field-label" for="potluck-dish">
+          <span class="step-pill">04</span> Your Potluck Dish That Reminds You of Keren *
+        </label>
+        <span class="field-hint">
+          What dish are you bringing, and why does it capture Keren's exact energy?
+        </span>
+        <input
+          type="text"
+          id="potluck-dish"
+          name="potluckDish"
+          placeholder="e.g., Extra-spicy pani puri because it's chaotic but everyone loves it..."
+          required
+        />
+      </div>
+
+      <!-- Step 5: Printed 500-Word Essay Oath Box -->
+      <div class="field-group pledge-box">
+        <label class="field-label" for="essay-promise">
+          <span class="step-pill">05</span> The Sacred 500-Word Printed Essay Oath *
+        </label>
+        <span class="field-hint">
+          No printed essay = no entry at the door! Check the box below to seal your fate:
+        </span>
+
+        <label class="pledge-check-label" id="pledge-label" for="essay-promise">
+          <input type="checkbox" id="essay-promise" name="essayPromise" required />
+          <div class="pledge-text">
+            ✋ I solemnly swear to write a <strong>minimum 500-word essay on Keren</strong>, print it out on physical paper, bring it to the party, and hand-deliver it to Keren in person.
+            <span class="pledge-sub">
+              (Bouncers at the door will be counting words. Double-spaced 72pt font tricks will be publicly shamed.)
+            </span>
+          </div>
+        </label>
+      </div>
+
+      <div class="privacy-note">
+        🔒 <strong>Private Submission:</strong> Your RSVP, phone number, and potluck dish are transmitted directly to the host's private vault and are never displayed publicly.
+      </div>
+
+      <button type="submit" id="submit-btn" class="submit-btn">
+        🎉 Lock In My Birthday Bash RSVP!
+      </button>
+
+      <div id="status-banner" class="status-banner" role="alert"></div>
+    </form>
+  </div>
+
+  <script>
+    // =========================================================================
+    // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW
+    // =========================================================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyNXFIOrOC2EOmq9GcB2L7lGkGc9oA5xbgd2-y-Mz9fBLSCSB3vzAuFhCDA0lj7Q44/exec";
+
+    const form = document.getElementById("bday-form");
+    const pledgeCheckbox = document.getElementById("essay-promise");
+    const pledgeLabel = document.getElementById("pledge-label");
+    const submitBtn = document.getElementById("submit-btn");
+    const statusBanner = document.getElementById("status-banner");
+
+    pledgeCheckbox.addEventListener("change", () => {
+      if (pledgeCheckbox.checked) {
+        pledgeLabel.classList.add("checked");
+      } else {
+        pledgeLabel.classList.remove("checked");
+      }
+    });
+
+    // Confetti Burst on Submission
+    function launchConfetti() {
+      const canvas = document.getElementById("confetti-canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ["#ff2a85", "#ffe66d", "#00c46a", "#6c2bd9", "#ff6b35", "#00f5d4"];
+      const pieces = Array.from({ length: 130 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: Math.random() * 10 + 6,
+        h: Math.random() * 6 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: Math.random() * 4 + 2.5,
+        vx: (Math.random() - 0.5) * 3,
+        rot: Math.random() * Math.PI * 2,
+        vrot: (Math.random() - 0.5) * 0.15
+      }));
+
+      let frames = 0;
+      function frame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vrot;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+        frames++;
+        if (frames < 220) {
+          requestAnimationFrame(frame);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusBanner.className = "status-banner";
+      statusBanner.style.display = "none";
+
+      const name = document.getElementById("guest-name").value.trim();
+      const phone = document.getElementById("guest-phone").value.trim();
+      const dateRadio = document.querySelector('input[name="dateChoice"]:checked');
+      const potluckDish = document.getElementById("potluck-dish").value.trim();
+      const promisedEssay = pledgeCheckbox.checked;
+
+      if (!name || !phone || !dateRadio || !potluckDish) {
+        statusBanner.className = "status-banner error";
+        statusBanner.textContent = "⚠️ Hold up! Please fill out your Name, Phone Number, Date Choice, and Potluck Dish!";
+        statusBanner.style.display = "block";
+        return;
+      }
+
+      if (!promisedEssay) {
+        statusBanner.className = "status-banner error";
+        statusBanner.textContent = "🖨️ Nice try! You MUST check the box promising to bring your printed 500-word essay on Keren to attend!";
+        statusBanner.style.display = "block";
+        return;
+      }
+
+      const payload = {
+        name,
+        phone,
+        dateChoice: dateRadio.value,
+        potluckDish,
+        essayPromise: "YES - Sworn to bring printed 500-word essay on Keren",
+        submittedAt: new Date().toISOString()
+      };
+
+      if (GOOGLE_SCRIPT_URL.includes("REPLACE_WITH_YOUR_DEPLOYMENT_ID")) {
+        statusBanner.className = "status-banner error";
+        statusBanner.innerHTML =
+          "⚙️ <strong>Host Setup Pending:</strong> Paste your Google Apps Script Web App URL into <code>GOOGLE_SCRIPT_URL</code> inside <code>kerensbdaybash.html</code> to activate live submissions!";
+        statusBanner.style.display = "block";
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "🚀 Locking In Your RSVP...";
+
+      try {
+        // Send as text/plain with no-cors so Google Apps Script accepts it without preflight CORS issues
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        launchConfetti();
+        form.reset();
+        pledgeLabel.classList.remove("checked");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "🎉 Lock In My Birthday Bash RSVP!";
+
+        statusBanner.className = "status-banner success";
+        statusBanner.innerHTML =
+          "🎂 <strong>YOU'RE IN!</strong> Your RSVP, potluck dish, and solemn oath to bring a printed 500-word essay on Keren have been locked in. Better warm up your printer!";
+        statusBanner.style.display = "block";
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "🎉 Lock In My Birthday Bash RSVP!";
+        statusBanner.className = "status-banner error";
+        statusBanner.textContent = "❌ Transmission hiccup! Please try clicking Submit again.";
+        statusBanner.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
