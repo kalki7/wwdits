@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KEREN'S BDAY BASH // OFFICIAL ENTRY TRIBUTE & POTLUCK FORM</title>
+  <title>keren's bday bash // official entry tribute & potluck form</title>
   <!--
     ========================================================================
     HOW TO CONNECT THIS FORM PRIVATELY TO YOUR GOOGLE SHEET (2 MINUTES)
@@ -17,16 +17,25 @@
        Timestamp | Name | Phone | Date Choice | Potluck Dish | Printed 500-Word Essay Promise
     3. Click Extensions -> Apps Script, and paste this exact script:
 
+       function clean(val, maxLen) {
+         var str = String(val || "").trim().slice(0, maxLen || 300);
+         // Prevent Google Sheets formula injection (=, +, -, @)
+         if (/^[=+\-@]/.test(str)) {
+           str = "'" + str;
+         }
+         return str;
+       }
+
        function doPost(e) {
          var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
          var data = JSON.parse(e.postData.contents);
          sheet.appendRow([
            new Date().toISOString(),
-           data.name || "",
-           data.phone || "",
-           data.dateChoice || "",
-           data.potluckDish || "",
-           data.essayPromise || ""
+           clean(data.name, 100),
+           clean(data.phone, 40),
+           clean(data.dateChoice, 60),
+           clean(data.potluckDish, 300),
+           clean(data.essayPromise, 100)
          ]);
          return ContentService
            .createTextOutput(JSON.stringify({ status: "ok" }))
@@ -81,6 +90,12 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      text-transform: lowercase !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      text-transform: lowercase !important;
     }
 
     body {
